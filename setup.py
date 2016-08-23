@@ -19,16 +19,16 @@ class NoseTestCommand(TestCommand):
 
 
 setup(
-    name = 'passwd',
+    name = 'team-password-cli',
     description = 'Team Password Manager cli',
-    version = re.search(r'''^__version__\s*=\s*["'](.*)["']''', open('passwd/__init__.py').read(), re.M).group(1),
+    version = re.search(r'''^__version__\s*=\s*["'](.*)["']''', open('team-password-cli/__init__.py').read(), re.M).group(1),
     author = 'Nico Di Rocco',
     author_email = 'dirocco.nico@gmail.com',
-    url = 'http://nrocco.github.io/',
+    url = 'http://funzoneq.github.io/',
     license = 'GPLv3',
     long_description = codecs.open('README.rst', 'rb', 'utf-8').read(),
     test_suite='nose.collector',
-    download_url = 'http://github.com/nrocco/passwd/tags',
+    download_url = 'http://github.com/funzoneq/team-password-cli/tags',
     include_package_data = True,
     install_requires = [
         'pycli-tools>=2.0.2',
@@ -36,11 +36,11 @@ setup(
         'tabulate==0.7.5',
     ],
     packages = [
-        'passwd'
+        'team-password-cli'
     ],
     entry_points = {
         'console_scripts': [
-            'passctl = passwd.command:parse_and_run',
+            'passctl = team-password-cli.command:parse_and_run',
         ]
     },
     classifiers = [
