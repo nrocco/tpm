@@ -18,7 +18,7 @@ the `team_password_cli` package directly from pypi (using pip)::
 
 Alternatively you can manually clone `team_password_cli` and run setupttools `setup.py`::
 
-    $ git clone https://github.com/funzoneq/team_password_cli.git
+    $ git clone https://github.com/nrocco/team_password_cli.git
     $ cd team_password_cli
     $ python setup.py install
 
