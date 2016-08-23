@@ -3,7 +3,7 @@ VIRTUAL_ENV ?= $(PWD)/env
 PY = $(VIRTUAL_ENV)/bin/python
 PIP = $(VIRTUAL_ENV)/bin/pip
 
-PACKAGE = passwd
+PACKAGE = team-password-cli
 
 
 $(PY):
