@@ -7,7 +7,7 @@ from urllib.parse import quote
 from pycli_tools.parsers import get_argparser
 from pycli_tools.commands import Command, arg
 
-from team-password-cli import __version__
+from team_password_cli import __version__
 
 
 log = getLogger(__name__)
