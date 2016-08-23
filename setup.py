@@ -28,7 +28,7 @@ setup(
     license = 'GPLv3',
     long_description = codecs.open('README.rst', 'rb', 'utf-8').read(),
     test_suite='nose.collector',
-    download_url = 'http://github.com/funzoneq/team_password_cli/tags',
+    download_url = 'https://github.com/nrocco/team_password_cli/tags',
     include_package_data = True,
     install_requires = [
         'pycli-tools>=2.0.2',

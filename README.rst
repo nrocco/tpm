@@ -1,5 +1,5 @@
 team_password_cli
-======
+=================
 
 A Team Password Manager CLI Application
 
@@ -36,3 +36,25 @@ To install the required dependencies manually see `requirements.txt`
 or simply run::
 
     $ pip install -r requirements.txt
+
+
+Usage
+-----
+
+TODO
+
+
+Contributing
+------------
+
+1. Fork the repo and create your branch from `master`.
+2. If you've added code that should be tested, add tests.
+3. If you've changed APIs, update the documentation.
+4. Ensure the test suite passes.
+
+
+Contributors
+------------
+
+- Nico Di Rocco (https://github.com/nrocco)
+- Arnoud Vermeer (https://github.com/funzoneq)
