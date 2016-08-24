@@ -1,12 +1,13 @@
-from pprint import pprint
-from logging import getLogger
-from tabulate import tabulate
 from datetime import datetime
-from urllib.parse import quote
-from pycli_tools.parsers import get_argparser
+from logging import getLogger
+from os.path import expanduser
+from pprint import pprint
 from pycli_tools.commands import Command, arg
+from pycli_tools.parsers import get_argparser
+from tabulate import tabulate
 from team_password_cli import __version__
 from team_password_cli.rest_client import get_client
+from urllib.parse import quote
 
 
 log = getLogger(__name__)
@@ -101,7 +102,7 @@ def parse_and_run(args=None):
         version=__version__,
         logging_format='[%(asctime)-15s] %(levelname)s %(message)s',
         description='Team Password Manager cli',
-        default_config=['.passctlrc']
+        default_config=[expanduser('~/.passctlrc')]
     )
 
     parser.add_commands([
