@@ -12,20 +12,41 @@ from team_password_cli.rest_client import get_client
 log = getLogger(__name__)
 
 
+class HelpCommand(Command):
+    '''Get information on how to use this tool'''
+
+    def run(self, args, parser):
+        print('Searching:')
+        print('''
+    tag:string
+            Search passwords that have a tag that matches the string.
+
+    access:string
+            Search passwords that have the string in the access field.
+
+    username:string
+            Search passwords that have the string in the username field.
+
+    name:string
+            Search passwords that have the string in the name field
+        ''')
+
+
 class SearchCommand(Command):
-    '''Search for passwords'''
+    '''Search for passwords
+
+    When searching for passwords in Team Password Manager you can use special
+    operators that can help you refine your results. Search operators are
+    special words that allow you to find passwords quickly and accurately.
+    '''
 
     args = [
         arg('--no-headers', action="store_true"),
-        arg('search', nargs="?")
+        arg('search')
     ]
 
     def run(self, args, parser):
-        if args.search:
-            search = quote(' '.join(args.search))
-            resource = '/api/v4/passwords/search/{}.json'.format(search)
-        else:
-            resource = '/api/v4/passwords.json'
+        resource = '/api/v4/passwords/search/{}.json'.format(quote(args.search))
 
         log.debug("Calling {}".format(resource))
         r = args.client.get(resource)
@@ -85,7 +106,8 @@ def parse_and_run(args=None):
 
     parser.add_commands([
         SearchCommand(),
-        ShowCommand()
+        ShowCommand(),
+        HelpCommand(),
     ])
 
     args = parser.parse_args()
