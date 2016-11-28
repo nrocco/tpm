@@ -13,6 +13,13 @@ from urllib.parse import quote
 log = getLogger(__name__)
 
 
+def get_credentials(args):
+    if not args.username:
+        args.username = input('Username: ')
+    if not args.password:
+        args.password = getpass('Password: ')
+
+
 class HelpCommand(Command):
     '''Get information on how to use this tool'''
 
@@ -30,6 +37,17 @@ class HelpCommand(Command):
 
     name:string
             Search passwords that have the string in the name field
+        ''')
+
+        print('Configuration:')
+        print('''
+    Create a configuration file with the following format:
+
+    % cat ~/.passctlrc
+    [passctl]
+    baseurl = https://passwords.example.com/index.php
+    username = my-username@example.com
+    password = xxxxxxxxxxxxxxxxxxx
         ''')
 
 

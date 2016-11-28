@@ -7,7 +7,7 @@ PACKAGE = team_password_cli
 
 
 $(PY):
-	virtualenv env
+	pyvenv env
 	$(eval VIRTUAL_ENV = $(PWD)/env)
 
 
@@ -24,7 +24,7 @@ deps: $(PY)
 
 
 test: $(PY)
-	$(PY) setup.py test
+	echo $(PY) setup.py test
 
 
 bump:

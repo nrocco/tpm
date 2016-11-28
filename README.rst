@@ -41,7 +41,13 @@ or simply run::
 Usage
 -----
 
-TODO
+Create a configuration file with the following format::
+
+    % cat ~/.passctlrc
+    [passctl]
+    baseurl = https://passwords.example.com/index.php
+    username = my-username@example.com
+    password = xxxxxxxxxxxxxxxxxxx
 
 
 Contributing
