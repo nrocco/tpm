@@ -1,6 +1,9 @@
 team_password_cli
 =================
 
+.. image:: https://travis-ci.org/nrocco/team_password_cli.svg?branch=master
+    :target: https://travis-ci.org/nrocco/team_password_cli
+
 A Team Password Manager CLI Application
 
 
@@ -53,10 +56,12 @@ Create a configuration file with the following format::
 Contributing
 ------------
 
-1. Fork the repo and create your branch from `master`.
-2. If you've added code that should be tested, add tests.
-3. If you've changed APIs, update the documentation.
-4. Ensure the test suite passes.
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Make sure that tests pass (`make test`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create new Pull Request
 
 
 Contributors

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import re
+import io
 import codecs
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
 
@@ -18,31 +19,35 @@ class NoseTestCommand(TestCommand):
         nose.run_exit(argv=['nosetests'])
 
 
+def load_requirements(filename):
+    with io.open(filename, encoding='utf-8') as reqfile:
+        return [line.strip() for line in reqfile if not line.startswith('#')]
+
+
 setup(
     name = 'team_password_cli',
     description = 'Team Password Manager cli',
     version = re.search(r'''^__version__\s*=\s*["'](.*)["']''', open('team_password_cli/__init__.py').read(), re.M).group(1),
     author = 'Nico Di Rocco',
     author_email = 'dirocco.nico@gmail.com',
-    url = 'http://nrocco.github.io/',
+    url = 'https://github.com/nrocco/team_password_cli',
     license = 'GPLv3',
     long_description = codecs.open('README.rst', 'rb', 'utf-8').read(),
-    test_suite='nose.collector',
+    test_suite = 'nose.collector',
     download_url = 'https://github.com/nrocco/team_password_cli/tags',
     include_package_data = True,
-    install_requires = [
-        'pycli-tools>=2.0.2',
-        'requests==2.11.1',
-        'tabulate==0.7.5',
-    ],
-    packages = [
-        'team_password_cli'
+    install_requires = load_requirements('requirements.txt'),
+    tests_require = [
+        'nose',
+        'mock',
+        'coverage',
     ],
     entry_points = {
         'console_scripts': [
             'passctl = team_password_cli.command:parse_and_run',
         ]
     },
+    packages = find_packages(),
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
@@ -58,5 +63,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities'
-    ]
+    ],
+    cmdclass = {
+        'test': NoseTestCommand
+    }
 )
