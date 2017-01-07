@@ -11,13 +11,8 @@ $(PY):
 	python3 -m venv $(VIRTUAL_ENV)
 
 
-$(PIP): $(PY)
-	$(PIP) install --upgrade pip
-	$(PIP) install --upgrade setuptools
-
-
 .PHONY: venv
-venv: $(PY) $(PIP)
+venv: $(PY)
 	$(PIP) install -r requirements.txt
 
 
