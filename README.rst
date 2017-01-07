@@ -10,11 +10,11 @@ A Team Password Manager CLI Application
 installation
 ------------
 
-`team_password_cli` is fully python 2.7 and python 3.4 compatible.
+`team_password_cli` is fully python 2 and python 3 compatible.
 
-It is highly recommended to use virtualenv for this.
-After having your virtualenv installed and activated run the following command to install
-the `team_password_cli` package directly from pypi (using pip)::
+It is highly recommended to use virtualenv for this. After having your
+virtualenv installed and activated run the following command to install the
+`team_password_cli` package directly from pypi (using pip)::
 
     $ pip install team_password_cli
 
@@ -35,10 +35,9 @@ you are responsible for manually installing dependencies::
     $ python -m team_password_cli
 
 
-To install the required dependencies manually see `requirements.txt` 
-or simply run::
+To contribute install `team_password_cli` using setuptools develop::
 
-    $ pip install -r requirements.txt
+    $ python setup.py develop
 
 
 Usage
