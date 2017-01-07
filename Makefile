@@ -18,17 +18,17 @@ venv: $(PY)
 
 .PHONY: test
 test: venv
-	python3 setup.py test
+	$(PY) setup.py test
 
 
 .PHONY: dist
 dist: test
-	python3 setup.py sdist
+	$(PY) setup.py sdist
 
 
 .PHONY: install
-install:
-	python3 setup.py install --prefix="$(prefix)" --root="$(DESTDIR)" --optimize=1
+install: venv
+	$(PY) setup.py install --prefix="$(prefix)" --root="$(DESTDIR)" --optimize=1
 
 
 .PHONY: clean
