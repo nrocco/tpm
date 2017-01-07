@@ -19,11 +19,6 @@ class NoseTestCommand(TestCommand):
         nose.run_exit(argv=['nosetests'])
 
 
-def load_requirements(filename):
-    with io.open(filename, encoding='utf-8') as reqfile:
-        return [line.strip() for line in reqfile if not line.startswith('#')]
-
-
 setup(
     name = 'team_password_cli',
     description = 'Team Password Manager cli',
@@ -36,7 +31,11 @@ setup(
     test_suite = 'nose.collector',
     download_url = 'https://github.com/nrocco/team_password_cli/tags',
     include_package_data = True,
-    install_requires = load_requirements('requirements.txt'),
+    install_requires = [
+        'pycli-tools',
+        'requests',
+        'tabulate',
+    ],
     tests_require = [
         'nose',
         'mock',

@@ -10,7 +10,7 @@ notifications:
   email:
     on_success: always
     on_failure: always
-script: make test
+script: make test dist
 deploy:
   provider: pypi
   user: nrocco
