@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 setup(
     name = 'team_password_cli',
     description = 'Team Password Manager cli',
-    version = '0.1.3',
+    version = '1.0.0',
     author = 'Nico Di Rocco',
     author_email = 'dirocco.nico@gmail.com',
     url = 'https://github.com/nrocco/team_password_cli',
