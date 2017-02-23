@@ -45,7 +45,7 @@ Usage
 
 Create a configuration file with the following format::
 
-    % cat ~/.passctlrc
+    % cat ~/.passctl.ini
     [passctl]
     baseurl = https://passwords.example.com/index.php
     username = my-username@example.com
