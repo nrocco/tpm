@@ -36,7 +36,7 @@ develop: $(PASSCTL)
 
 .PHONY: test
 test: $(PASSCTL) $(PYTEST)
-	$(PYTEST) --cov=team_password_cli --cov-fail-under=90 --no-cov-on-fail --cov-report term --cov-report html tests/ $(ARGS)
+	$(PYTEST) --cov=team_password_cli --no-cov-on-fail --cov-report term --cov-report html tests/ $(ARGS)
 
 
 .PHONY: dist
