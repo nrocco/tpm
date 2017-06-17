@@ -1,7 +1,7 @@
 tpm
 ===
 
-A Team Password Manager Client written in go
+A Team Password Manager Client written in go.
 
 
 Usage
@@ -13,11 +13,6 @@ Create a configuration file with the following format:
     server: "https://tpm.example.com/index.php"
     username: "my-username"
     password: "my-dkj880s0sjd-password"
-
-tpm password ls
-tpm password search
-tpm password show
-
 
 
 Contributing
