@@ -1,79 +1,51 @@
 package cmd
 
 import (
-    "encoding/json"
+    "strings"
     "errors"
-    // "fmt"
-    "io/ioutil"
-    "log"
-    "net/http"
     "os"
     "strconv"
-    "strings"
-    "time"
 
     "github.com/spf13/cobra"
     "github.com/spf13/viper"
     "github.com/olekukonko/tablewriter"
-)
-
-type Password struct {
-    Id int `json:"id"`
-    Name string`json:"name"`
-    AccessInfo string`json:"access_info"`
-    Username string`json:"username"`
-    Email string`json:"updated_on"`
-    UpdatedOn string`json:"updated_on"`
-}
-
-type Passwords []Password
-
-var (
-    tag string
+    "github.com/nrocco/tpm/client"
 )
 
 var searchCmd = &cobra.Command{
-    Use:   "search",
-    Short: "A brief description of your command",
-    Long: ``,
+    Use: "search",
+    Short: "Search for passwords",
+    Long: `When searching for passwords in Team Password Manager you can use special
+operators that can help you refine your results. Search operators are
+special words that allow you to find passwords quickly and accurately.
+
+tag:string
+    Search passwords that have a tag that matches the string.
+
+access:string
+    Search passwords that have the string in the access field.
+
+username:string
+    Search passwords that have the string in the username field.
+
+name:string
+    Search passwords that have the string in the name field`,
     RunE: func(cmd *cobra.Command, args []string) error {
         if len(args) == 0 {
             return errors.New("You need to provide a search query")
         }
 
-        url := viper.GetString("base_url") + "/api/v4/passwords/search/" + strings.Join(args, " ") + "/page/1.json"
+        search := strings.Join(args, " ")
 
-        client := &http.Client{
-            Timeout: time.Second * 10,
-        }
+        client := client.New(
+            viper.GetString("server"),
+            viper.GetString("username"),
+            viper.GetString("password"),
+        )
 
-        req, reqError := http.NewRequest(http.MethodGet, url, nil)
-        if reqError != nil {
-            log.Fatal(reqError)
-            return reqError
-        }
-
-        req.SetBasicAuth(viper.GetString("username"), viper.GetString("password"))
-        req.Header.Add("Content-Type", `application/json; charset=utf-8`)
-        req.Header.Set("User-Agent", "tmp vXXX")
-
-        res, resError := client.Do(req)
-        if resError != nil {
-            log.Fatal(resError)
-            return resError
-        }
-
-        body, bodyError := ioutil.ReadAll(res.Body)
-        if bodyError != nil {
-            log.Fatal(bodyError)
-            return bodyError
-        }
-
-        passwords := Passwords{}
-        jsonError := json.Unmarshal(body, &passwords)
-        if jsonError != nil {
-            log.Fatal(jsonError)
-            return jsonError
+        passwords, err := client.List(search)
+        if err != nil {
+            return err
         }
 
         table := tablewriter.NewWriter(os.Stdout)
@@ -83,7 +55,7 @@ var searchCmd = &cobra.Command{
         table.SetRowLine(false)
 
         for _, password := range passwords {
-            table.Append([]string{strconv.FormatInt(int64(password.Id), 10), password.Name, password.AccessInfo, password.Username})
+            table.Append([]string{strconv.FormatInt(int64(password.Id), 10), password.Name, password.AccessInfo, password.Username, password.Tags})
         }
 
         table.Render()
@@ -94,6 +66,4 @@ var searchCmd = &cobra.Command{
 
 func init() {
     RootCmd.AddCommand(searchCmd)
-
-    searchCmd.Flags().StringVar(&tag, "tag", "", "Filter search results by the given tag")
 }

@@ -32,11 +32,11 @@ func init() {
 
     RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tpm.yaml)")
 
-    RootCmd.PersistentFlags().StringP("base-url", "s", "http://127.0.0.1", "Team Password Manager base url")
-    RootCmd.PersistentFlags().StringP("username", "u", "from-defaults", "Username")
-    RootCmd.PersistentFlags().StringP("password", "p", "@dm!n", "Password")
+    RootCmd.PersistentFlags().StringP("server", "s", "", "The base url of the Team Password Manager server")
+    RootCmd.PersistentFlags().StringP("username", "u", "", "Username")
+    RootCmd.PersistentFlags().StringP("password", "p", "", "Password")
 
-    viper.BindPFlag("base_url", RootCmd.PersistentFlags().Lookup("base-url"))
+    viper.BindPFlag("server", RootCmd.PersistentFlags().Lookup("server"))
     viper.BindPFlag("username", RootCmd.PersistentFlags().Lookup("username"))
     viper.BindPFlag("password", RootCmd.PersistentFlags().Lookup("password"))
 }
@@ -44,26 +44,20 @@ func init() {
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
     if cfgFile != "" {
-        // Use config file from the flag.
         viper.SetConfigFile(cfgFile)
     } else {
-        // Find home directory.
         home, err := homedir.Dir()
-        if err != nil {
-            fmt.Println(err)
-            os.Exit(1)
+        if err == nil {
+            viper.AddConfigPath(home)
+            viper.SetConfigName(".tpm")
         }
-
-        // Search config in home directory with name ".tpm" (without extension).
-        viper.AddConfigPath(home)
-        viper.SetConfigName(".tpm")
     }
 
     viper.SetEnvPrefix("tpm")
-    viper.AutomaticEnv() // read in environment variables that match
+    viper.AutomaticEnv()
 
-    // If a config file is found, read it in.
-    if err := viper.ReadInConfig(); err == nil {
-        // fmt.Println("Using config file:", viper.ConfigFileUsed())
+    err := viper.ReadInConfig()
+    if err != nil {
+        fmt.Println(err)
     }
 }
