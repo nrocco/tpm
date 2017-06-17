@@ -1,21 +1,16 @@
 ---
-language: python
-python:
-  - '2.7'
-  - '3.3'
-  - '3.4'
-  - '3.5'
-  - '3.6'
+language: go
+
+go:
+  - 1.7.x
+  - 1.8.x
+install:
+  - go get github.com/olekukonko/tablewriter
+  - go get github.com/spf13/cobra/cobra
+  - go get github.com/spf13/viper
+  - go get github.com/mitchellh/go-homedir
 notifications:
   email:
     on_success: always
     on_failure: always
-script: make test dist
-deploy:
-  provider: pypi
-  user: nrocco
-  password:
-    secure: XBQHTqVKVFKaoG1aedKLHTwxN0RAIsMfRRtngQcG8aXcO5OmCz2Nh8U6zLvmIymIm3fSc6fFBuRYnlzHeVy4qo2yXKZYNrQcS+BUnImE/58DGLfSvl8MvfzzPBhWRDR+0BgE3/fEsPrTHCmARyJClKv5MMQdZNUWrJvFH0X6KKs0HDv3/4LAkO+DBikDUPj6vHJi3byeLNHJdClGEaJ3P/boDhD6xhokjNThfrd36G0ypvgQGf2HmEt50NWi8PBPApMw86BKblXSlhwH6Lx+H9eQ86tA1cNG2F8xkXyxtFJojHvxfH+bjjAX5W/kVWPCZWu3c7B/KJwN2LHRgtDE6cq7bLrmvVWYXsuhuXv5z3eCzmBwClm22oPWK+BDMG7V5B1MMVpGKnp1v9S/0rfkPD0ezay6Af34lX8is+zhr2H4ZcsfktKXMqZto1tUBHHfN0z5nZNlF2boVugx3in6xUm/sMyWS8w9qsZfiC/K3PYWAnUK7xANNitpnoaA0FmbweY7pNylzJ/xa8NWWKjcBhf9gro5YDccT6CmV4ohpt018i45o5Sk7Qun1e1EGVNbYxcKx0DUhc0VuKdA4cjHzzXko2x9Vf69l0iROj0qliQjXp+jdTU9BtqfHGbUlc5mSvYLDjNUL5VAy38/M1Dx3rvCyDltWFg9CzQbCYqIElM=
-  on:
-    tags: true
-    branch: master
+script: make
