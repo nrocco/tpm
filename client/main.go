@@ -8,6 +8,12 @@ import (
     "net/http"
 )
 
+type ApiVersion struct {
+    Version string`json:"version"`
+    Date string`json:"version_date"`
+    Number string`json:"api_version"`
+}
+
 type SimplePassword struct {
     Id int `json:"id"`
     AccessInfo string`json:"access_info"`
@@ -66,6 +72,42 @@ func New(server string, username string, password string) Client {
     }
 
     return client
+}
+
+func (client *Client) Version() (*ApiVersion, error) {
+    url := client.Server + "/api/v4/version.json"
+
+    req, reqError := http.NewRequest(http.MethodGet, url, nil)
+    if reqError != nil {
+        log.Fatal(reqError)
+        return nil, reqError
+    }
+
+    req.SetBasicAuth(client.Username, client.Password)
+    req.Header.Add("Content-Type", `application/json; charset=utf-8`)
+    req.Header.Set("User-Agent", "nrocco/tpm")
+
+    res, resError := client.Client.Do(req)
+    if resError != nil {
+        log.Fatal(resError)
+        return nil, resError
+    }
+
+    body, bodyError := ioutil.ReadAll(res.Body)
+    if bodyError != nil {
+        log.Fatal(bodyError)
+        return nil, bodyError
+    }
+
+    apiVersion := &ApiVersion{}
+
+    jsonError := json.Unmarshal(body, apiVersion)
+    if jsonError != nil {
+        log.Fatal(jsonError)
+        return nil, jsonError
+    }
+
+    return apiVersion, nil
 }
 
 func (client *Client) List(search string) (SimplePasswords, error) {

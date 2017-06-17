@@ -1,28 +1,19 @@
 package cmd
 
 import (
+    "fmt"
     "errors"
-    "html/template"
-    "os"
+    "strconv"
 
     "github.com/spf13/cobra"
     "github.com/spf13/viper"
     "github.com/nrocco/tpm/client"
+    "github.com/fatih/color"
 )
-
-var fafa = `Name:       {{ .Name }}
-Id:         {{ .Id }}
-AccessInfo: {{ .AccessInfo }}
-Username:   {{ .Username }}
-Password:   {{ .Password }}
-Email:      {{ .Email }}
-UpdatedOn:  {{ .UpdatedOn }}
-Tags:       {{ .Tags }}
-`
 
 var showCmd = &cobra.Command{
     Use:   "show",
-    Short: "A brief description of your command",
+    Short: "Show a single password",
     Long: ``,
     RunE: func(cmd *cobra.Command, args []string) error {
         if len(args) != 1 {
@@ -42,17 +33,24 @@ var showCmd = &cobra.Command{
             return err
         }
 
-        tmpl, err := template.New("fafa").Parse(fafa)
-        if err != nil {
-            return err
-        }
+        fmt.Println("Id:         " + strconv.FormatInt(int64(password.Id), 10))
+        fmt.Println("Name:       " + password.Name)
+        fmt.Println("AccessInfo: " + password.AccessInfo)
+        fmt.Println("Username:   " + password.Username)
 
-        tmpl.Execute(os.Stdout, password)
+        fmt.Print("Password:   ")
+        red := color.New(color.FgRed)
+        red.Add(color.BgRed)
+        red.Println(password.Password)
+
+        fmt.Println("Email:      " + password.Email)
+        fmt.Println("UpdatedOn:  " + password.UpdatedOn)
+        fmt.Println("Tags:       " + password.Tags)
 
         return nil
     },
 }
 
 func init() {
-    RootCmd.AddCommand(showCmd)
+    passwordCmd.AddCommand(showCmd)
 }

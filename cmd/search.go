@@ -65,5 +65,5 @@ name:string
 }
 
 func init() {
-    RootCmd.AddCommand(searchCmd)
+    passwordCmd.AddCommand(searchCmd)
 }
