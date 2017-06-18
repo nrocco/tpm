@@ -3,6 +3,8 @@ tpm
 
 A Team Password Manager Client written in go.
 
+[![Build Status](https://travis-ci.org/nrocco/tpm.svg?branch=master)](https://travis-ci.org/nrocco/tpm)
+
 
 Usage
 -----
