@@ -18,16 +18,16 @@ operators that can help you refine your results. Search operators are
 special words that allow you to find passwords quickly and accurately.
 
 tag:string
-    Search passwords that have a tag that matches the string.
+	Search passwords that have a tag that matches the string.
 
 access:string
-    Search passwords that have the string in the access field.
+	Search passwords that have the string in the access field.
 
 username:string
-    Search passwords that have the string in the username field.
+	Search passwords that have the string in the username field.
 
 name:string
-    Search passwords that have the string in the name field`,
+	Search passwords that have the string in the name field`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return errors.New("You need to provide a search query")

@@ -13,46 +13,6 @@ type ApiVersion struct {
 	Number  string `json:"api_version"`
 }
 
-type SimplePassword struct {
-	Id         int    `json:"id"`
-	AccessInfo string `json:"access_info"`
-	Email      string `json:"updated_on"`
-	Name       string `json:"name"`
-	UpdatedOn  string `json:"updated_on"`
-	Username   string `json:"username"`
-	Tags       string `json:"tags"`
-}
-
-type CustomField struct {
-	Type  string `json:"type"`
-	Label string `json:"label"`
-	Data  string `json:"data"`
-}
-
-type DetailedPassword struct {
-	Id         int    `json:"id"`
-	AccessInfo string `json:"access_info"`
-	Email      string `json:"updated_on"`
-	Name       string `json:"name"`
-	Notes      string `"notes"`
-	Password   string `"password"`
-	Tags       string `json:"tags"`
-	UpdatedOn  string `json:"updated_on"`
-	Username   string `json:"username"`
-
-	CustomField1 CustomField `json:"custom_field1"`
-	CustomField2 CustomField `json:"custom_field2"`
-	CustomField3 CustomField `json:"custom_field3"`
-	CustomField4 CustomField `json:"custom_field4"`
-	CustomField5 CustomField `json:"custom_field5"`
-	CustomField6 CustomField `json:"custom_field6"`
-	CustomField7 CustomField `json:"custom_field7"`
-	CustomField8 CustomField `json:"custom_field8"`
-	CustomField9 CustomField `json:"custom_field9"`
-}
-
-type SimplePasswords []SimplePassword
-
 type TpmClient struct {
 	Client   *http.Client
 	Server   string
@@ -105,7 +65,7 @@ func (client *TpmClient) Version() (*ApiVersion, error) {
 	return apiVersion, nil
 }
 
-func (client *TpmClient) List(search string) (SimplePasswords, error) {
+func (client *TpmClient) List(search string) (Passwords, error) {
 	url := client.Server + "/api/v4/passwords/search/" + search + "/page/1.json"
 
 	req, reqError := http.NewRequest(http.MethodGet, url, nil)
@@ -127,7 +87,7 @@ func (client *TpmClient) List(search string) (SimplePasswords, error) {
 		return nil, bodyError
 	}
 
-	passwords := SimplePasswords{}
+	passwords := Passwords{}
 
 	jsonError := json.Unmarshal(body, &passwords)
 	if jsonError != nil {
@@ -137,7 +97,7 @@ func (client *TpmClient) List(search string) (SimplePasswords, error) {
 	return passwords, nil
 }
 
-func (client *TpmClient) Get(id string) (*DetailedPassword, error) {
+func (client *TpmClient) Get(id string) (*Password, error) {
 	url := client.Server + "/api/v4/passwords/" + id + ".json"
 
 	req, reqError := http.NewRequest(http.MethodGet, url, nil)
@@ -159,12 +119,12 @@ func (client *TpmClient) Get(id string) (*DetailedPassword, error) {
 		return nil, bodyError
 	}
 
-	detailedPassword := &DetailedPassword{}
+	password := &Password{}
 
-	jsonError := json.Unmarshal(body, detailedPassword)
+	jsonError := json.Unmarshal(body, password)
 	if jsonError != nil {
 		return nil, jsonError
 	}
 
-	return detailedPassword, nil
+	return password, nil
 }
