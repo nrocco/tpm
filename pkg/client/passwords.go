@@ -23,9 +23,9 @@ type Password struct {
 	Archived        bool    `json:"archived"`
 	Favorite        bool    `json:"favorite"`
 	Locked          bool    `json:"locked"`
-	NumFiles        string  `json:"num_files"`
+	NumFiles        int     `json:"num_files"`
 	ExternalSharing bool    `json:"external_sharing"`
-	ExternalUrl     string  `json:"external_url"`
+	ExternalURL     string  `json:"external_url"`
 	ManagedBy       User    `json:"managed_by"`
 	CreatedBy       User    `json:"created_by"`
 	UpdatedBy       User    `json:"updated_by"`
@@ -46,7 +46,7 @@ type Passwords []Password
 func (client *TpmClient) PasswordSearch(search string) (Passwords, error) {
 	passwords := Passwords{}
 
-	err := client.get("/api/v4/passwords/search/"+search+"/page/1.json", passwords)
+	err := client.get("/api/v4/passwords/search/"+search+"/page/1.json", &passwords)
 	if err != nil {
 		return nil, err
 	}

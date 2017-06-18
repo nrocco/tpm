@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type ApiVersion struct {
+type APIVersion struct {
 	Version string `json:"version"`
 	Date    string `json:"version_date"`
 	Number  string `json:"api_version"`
@@ -61,8 +61,8 @@ func (client *TpmClient) get(url string, v interface{}) error {
 	return nil
 }
 
-func (client *TpmClient) Version() (*ApiVersion, error) {
-	apiVersion := &ApiVersion{}
+func (client *TpmClient) Version() (*APIVersion, error) {
+	apiVersion := &APIVersion{}
 
 	err := client.get("/api/v4/version.json", apiVersion)
 	if err != nil {
