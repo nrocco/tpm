@@ -3,7 +3,6 @@ package client
 import (
     "time"
     "io/ioutil"
-    "log"
     "encoding/json"
     "net/http"
 )
@@ -54,15 +53,15 @@ type DetailedPassword struct {
 
 type SimplePasswords []SimplePassword
 
-type Client struct {
+type TpmClient struct {
     Client *http.Client
     Server string
     Username string
     Password string
 }
 
-func New(server string, username string, password string) Client {
-    client := Client{
+func New(server string, username string, password string) TpmClient {
+    client := TpmClient{
         Client: &http.Client{
             Timeout: time.Second * 10,
         },
@@ -74,12 +73,11 @@ func New(server string, username string, password string) Client {
     return client
 }
 
-func (client *Client) Version() (*ApiVersion, error) {
+func (client *TpmClient) Version() (*ApiVersion, error) {
     url := client.Server + "/api/v4/version.json"
 
     req, reqError := http.NewRequest(http.MethodGet, url, nil)
     if reqError != nil {
-        log.Fatal(reqError)
         return nil, reqError
     }
 
@@ -89,13 +87,11 @@ func (client *Client) Version() (*ApiVersion, error) {
 
     res, resError := client.Client.Do(req)
     if resError != nil {
-        log.Fatal(resError)
         return nil, resError
     }
 
     body, bodyError := ioutil.ReadAll(res.Body)
     if bodyError != nil {
-        log.Fatal(bodyError)
         return nil, bodyError
     }
 
@@ -103,19 +99,17 @@ func (client *Client) Version() (*ApiVersion, error) {
 
     jsonError := json.Unmarshal(body, apiVersion)
     if jsonError != nil {
-        log.Fatal(jsonError)
         return nil, jsonError
     }
 
     return apiVersion, nil
 }
 
-func (client *Client) List(search string) (SimplePasswords, error) {
+func (client *TpmClient) List(search string) (SimplePasswords, error) {
     url := client.Server + "/api/v4/passwords/search/" + search + "/page/1.json"
 
     req, reqError := http.NewRequest(http.MethodGet, url, nil)
     if reqError != nil {
-        log.Fatal(reqError)
         return nil, reqError
     }
 
@@ -125,13 +119,11 @@ func (client *Client) List(search string) (SimplePasswords, error) {
 
     res, resError := client.Client.Do(req)
     if resError != nil {
-        log.Fatal(resError)
         return nil, resError
     }
 
     body, bodyError := ioutil.ReadAll(res.Body)
     if bodyError != nil {
-        log.Fatal(bodyError)
         return nil, bodyError
     }
 
@@ -139,19 +131,17 @@ func (client *Client) List(search string) (SimplePasswords, error) {
 
     jsonError := json.Unmarshal(body, &passwords)
     if jsonError != nil {
-        log.Fatal(jsonError)
         return nil, jsonError
     }
 
     return passwords, nil
 }
 
-func (client *Client) Get(id string) (*DetailedPassword, error) {
+func (client *TpmClient) Get(id string) (*DetailedPassword, error) {
     url := client.Server + "/api/v4/passwords/" + id + ".json"
 
     req, reqError := http.NewRequest(http.MethodGet, url, nil)
     if reqError != nil {
-        log.Fatal(reqError)
         return nil, reqError
     }
 
@@ -161,13 +151,11 @@ func (client *Client) Get(id string) (*DetailedPassword, error) {
 
     res, resError := client.Client.Do(req)
     if resError != nil {
-        log.Fatal(resError)
         return nil, resError
     }
 
     body, bodyError := ioutil.ReadAll(res.Body)
     if bodyError != nil {
-        log.Fatal(bodyError)
         return nil, bodyError
     }
 
@@ -175,7 +163,6 @@ func (client *Client) Get(id string) (*DetailedPassword, error) {
 
     jsonError := json.Unmarshal(body, detailedPassword)
     if jsonError != nil {
-        log.Fatal(jsonError)
         return nil, jsonError
     }
 

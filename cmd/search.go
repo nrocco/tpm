@@ -7,9 +7,7 @@ import (
     "strconv"
 
     "github.com/spf13/cobra"
-    "github.com/spf13/viper"
     "github.com/olekukonko/tablewriter"
-    "github.com/nrocco/tpm/client"
 )
 
 var searchCmd = &cobra.Command{
@@ -37,13 +35,7 @@ name:string
 
         search := strings.Join(args, " ")
 
-        client := client.New(
-            viper.GetString("server"),
-            viper.GetString("username"),
-            viper.GetString("password"),
-        )
-
-        passwords, err := client.List(search)
+        passwords, err := TpmClient.List(search)
         if err != nil {
             return err
         }

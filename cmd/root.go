@@ -2,29 +2,33 @@ package cmd
 
 import (
     "fmt"
-    "os"
 
     homedir "github.com/mitchellh/go-homedir"
     "github.com/spf13/cobra"
     "github.com/spf13/viper"
+
+    "github.com/nrocco/tpm/pkg/client"
 )
 
-var (
-    cfgFile string
-)
+var cfgFile string
 
-// RootCmd represents the base command when called without any subcommands
+var TpmClient client.TpmClient
+
 var RootCmd = &cobra.Command{
     Use:   "tpm",
     Short: "A Team Password Manager CLI Application",
     Long: ``,
+    PersistentPreRun: func(cmd *cobra.Command, args []string) {
+        TpmClient = client.New(
+            viper.GetString("server"),
+            viper.GetString("username"),
+            viper.GetString("password"),
+        )
+    },
 }
 
 func Execute() {
-    if err := RootCmd.Execute(); err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
+    RootCmd.Execute()
 }
 
 func init() {
@@ -41,7 +45,6 @@ func init() {
     viper.BindPFlag("password", RootCmd.PersistentFlags().Lookup("password"))
 }
 
-// initConfig reads in config file and ENV variables if set.
 func initConfig() {
     if cfgFile != "" {
         viper.SetConfigFile(cfgFile)

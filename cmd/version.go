@@ -7,39 +7,45 @@ import (
 
     "github.com/spf13/cobra"
     "github.com/spf13/viper"
-    "github.com/nrocco/tpm/client"
+
+    "github.com/nrocco/tpm/pkg/client"
 )
 
 var version string = "2.0.0-rc1"
+
+var tpmClient client.TpmClient
 
 var versionCmd = &cobra.Command{
     Use: "version",
     Short: "Show version of the client and server",
     Long: ``,
-    Run: func(cmd *cobra.Command, args []string) {
-        client := client.New(
+    PreRun: func(cmd *cobra.Command, args []string) {
+        tpmClient = client.New(
             viper.GetString("server"),
             viper.GetString("username"),
             viper.GetString("password"),
         )
-
+    },
+    RunE: func(cmd *cobra.Command, args []string) error {
         fmt.Println("Client:")
         fmt.Println("  Version:    " + version)
         fmt.Println("  OS/Arch:    " + runtime.GOOS + "/" + runtime.GOARCH)
         fmt.Println("  Shell:      " + os.Getenv("SHELL"))
         fmt.Println("  User:       " + os.Getenv("USER"))
-
-        serverVersion, err := client.Version()
-        if err != nil {
-            return
-        }
-
         fmt.Println("")
         fmt.Println("Server:")
-        fmt.Println("  Url:        " + client.Server)
-        fmt.Println("  Version:    " + serverVersion.Version)
-        fmt.Println("  Date:       " + serverVersion.Date)
-        fmt.Println("  ApiVersion: " + serverVersion.Number)
+            fmt.Println("  Url:        " + tpmClient.Server)
+
+        serverVersion, err := tpmClient.Version()
+        if err != nil {
+            fmt.Println("  Error:      " + err.Error())
+        } else {
+            fmt.Println("  Version:    " + serverVersion.Version)
+            fmt.Println("  Date:       " + serverVersion.Date)
+            fmt.Println("  ApiVersion: " + serverVersion.Number)
+        }
+
+        return nil
     },
 }
 

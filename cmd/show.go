@@ -6,8 +6,6 @@ import (
     "strconv"
 
     "github.com/spf13/cobra"
-    "github.com/spf13/viper"
-    "github.com/nrocco/tpm/client"
     "github.com/fatih/color"
 )
 
@@ -22,13 +20,7 @@ var showCmd = &cobra.Command{
 
         id := args[0]
 
-        client := client.New(
-            viper.GetString("server"),
-            viper.GetString("username"),
-            viper.GetString("password"),
-        )
-
-        password, err := client.Get(id)
+        password, err := TpmClient.Get(id)
         if err != nil {
             return err
         }
