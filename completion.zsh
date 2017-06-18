@@ -11,6 +11,7 @@ _tpm() {
   password_commands=(
     'help:Help about any command'
     'show:Show a single password'
+    'generate:Generate a strong, random password'
     'search:Search for passwords'
   )
 
