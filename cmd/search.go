@@ -35,7 +35,7 @@ name:string
 
 		search := strings.Join(args, " ")
 
-		passwords, err := TpmClient.List(search)
+		passwords, err := TpmClient.PasswordSearch(search)
 		if err != nil {
 			return err
 		}
@@ -47,7 +47,7 @@ name:string
 		table.SetRowLine(false)
 
 		for _, password := range passwords {
-			table.Append([]string{strconv.FormatInt(int64(password.Id), 10), password.Name, password.AccessInfo, password.Username, password.Tags})
+			table.Append([]string{strconv.FormatInt(int64(password.ID), 10), password.Name, password.AccessInfo, password.Username, password.Tags})
 		}
 
 		table.Render()

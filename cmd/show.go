@@ -20,12 +20,12 @@ var showCmd = &cobra.Command{
 
 		id := args[0]
 
-		password, err := TpmClient.Get(id)
+		password, err := TpmClient.PasswordGet(id)
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("Id:         " + strconv.FormatInt(int64(password.Id), 10))
+		fmt.Println("Id:         " + strconv.FormatInt(int64(password.ID), 10))
 		fmt.Println("Name:       " + password.Name)
 		fmt.Println("AccessInfo: " + password.AccessInfo)
 		fmt.Println("Username:   " + password.Username)

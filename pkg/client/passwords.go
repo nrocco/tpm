@@ -7,15 +7,28 @@ type CustomField struct {
 }
 
 type Password struct {
-	Id         int    `json:"id"`
-	AccessInfo string `json:"access_info"`
-	Email      string `json:"updated_on"`
-	Name       string `json:"name"`
-	Notes      string `"notes"`
-	Password   string `"password"`
-	Tags       string `json:"tags"`
-	UpdatedOn  string `json:"updated_on"`
-	Username   string `json:"username"`
+	ID              int     `json:"id"`
+	Project         Project `json:"project"`
+	AccessInfo      string  `json:"access_info"`
+	Email           string  `json:"email"`
+	Name            string  `json:"name"`
+	Notes           string  `json:"notes"`
+	Password        string  `json:"password"`
+	Tags            string  `json:"tags"`
+	CreatedOn       string  `json:"created_on"`
+	UpdatedOn       string  `json:"updated_on"`
+	Username        string  `json:"username"`
+	ExpiryDate      string  `json:"expiry_date"`
+	ExpiryStatus    int     `json:"expiry_status"`
+	Archived        bool    `json:"archived"`
+	Favorite        bool    `json:"favorite"`
+	Locked          bool    `json:"locked"`
+	NumFiles        string  `json:"num_files"`
+	ExternalSharing bool    `json:"external_sharing"`
+	ExternalUrl     string  `json:"external_url"`
+	ManagedBy       User    `json:"managed_by"`
+	CreatedBy       User    `json:"created_by"`
+	UpdatedBy       User    `json:"updated_by"`
 
 	CustomField1 CustomField `json:"custom_field1"`
 	CustomField2 CustomField `json:"custom_field2"`
@@ -29,3 +42,25 @@ type Password struct {
 }
 
 type Passwords []Password
+
+func (client *TpmClient) PasswordSearch(search string) (Passwords, error) {
+	passwords := Passwords{}
+
+	err := client.get("/api/v4/passwords/search/"+search+"/page/1.json", passwords)
+	if err != nil {
+		return nil, err
+	}
+
+	return passwords, nil
+}
+
+func (client *TpmClient) PasswordGet(id string) (*Password, error) {
+	password := &Password{}
+
+	err := client.get("/api/v4/passwords/"+id+".json", password)
+	if err != nil {
+		return nil, err
+	}
+
+	return password, nil
+}
