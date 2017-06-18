@@ -11,8 +11,6 @@ import (
 	"github.com/nrocco/tpm/pkg/client"
 )
 
-var version string = "2.0.0-rc1"
-
 var tpmClient client.TpmClient
 
 var versionCmd = &cobra.Command{
@@ -28,7 +26,7 @@ var versionCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Client:")
-		fmt.Println("  Version:    " + version)
+		fmt.Println("  Version:    " + VERSION)
 		fmt.Println("  OS/Arch:    " + runtime.GOOS + "/" + runtime.GOARCH)
 		fmt.Println("  Shell:      " + os.Getenv("SHELL"))
 		fmt.Println("  User:       " + os.Getenv("USER"))

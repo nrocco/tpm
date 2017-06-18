@@ -10,6 +10,8 @@ import (
 	"github.com/nrocco/tpm/pkg/client"
 )
 
+var VERSION string
+
 var cfgFile string
 
 var TpmClient client.TpmClient
@@ -27,8 +29,9 @@ var RootCmd = &cobra.Command{
 	},
 }
 
-func Execute() {
-	RootCmd.Execute()
+func Execute(version string) error {
+	VERSION = version
+	return RootCmd.Execute()
 }
 
 func init() {
