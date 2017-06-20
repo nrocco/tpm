@@ -1,7 +1,7 @@
 package client
 
 type Project struct {
-	ID        string `json:"id"`
+	ID        int    `json:"id"`
 	ParentID  int    `json:"parent_id"`
 	Name      string `json:"name"`
 	Notes     string `json:"notes"`
