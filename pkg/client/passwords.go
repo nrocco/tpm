@@ -23,7 +23,6 @@ type Password struct {
 	Archived        bool    `json:"archived"`
 	Favorite        bool    `json:"favorite"`
 	Locked          bool    `json:"locked"`
-	NumFiles        int     `json:"num_files"`
 	ExternalSharing bool    `json:"external_sharing"`
 	ExternalURL     string  `json:"external_url"`
 	ManagedBy       User    `json:"managed_by"`
@@ -39,6 +38,12 @@ type Password struct {
 	CustomField7 CustomField `json:"custom_field7"`
 	CustomField8 CustomField `json:"custom_field8"`
 	CustomField9 CustomField `json:"custom_field9"`
+
+	// NumFiles        int     `json:"num_files"`
+	// groups_permissions
+	// parents
+	// user_permission
+	// users_permissions
 }
 
 type Passwords []Password
