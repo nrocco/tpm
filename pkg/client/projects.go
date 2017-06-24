@@ -44,17 +44,17 @@ func (v *Projects) UnmarshalJSON(data []byte) error {
 }
 
 func (client *TpmClient) ProjectList(search string) (Projects, error) {
-	var baseUrl string
+	var baseURL string
 	var err error
 
 	if search != "" {
-		baseUrl = fmt.Sprintf("/api/v4/projects/search/%s", url.PathEscape(search))
+		baseURL = fmt.Sprintf("/api/v4/projects/search/%s", url.PathEscape(search))
 	} else {
-		baseUrl = "/api/v4/projects"
+		baseURL = "/api/v4/projects"
 	}
 
 	count := Count{}
-	err = client.get(baseUrl+"/count.json", &count)
+	err = client.get(baseURL+"/count.json", &count)
 	if err != nil {
 		return nil, err
 	}
@@ -63,12 +63,12 @@ func (client *TpmClient) ProjectList(search string) (Projects, error) {
 	projects := Projects{}
 
 	for page <= count.Pages {
-		err = client.get(fmt.Sprintf("%s/page/%d.json", baseUrl, page), &projects)
+		err = client.get(fmt.Sprintf("%s/page/%d.json", baseURL, page), &projects)
 		if err != nil {
 			return nil, err
 		}
 
-		page += 1
+		page++
 	}
 
 	return projects, nil

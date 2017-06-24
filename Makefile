@@ -7,7 +7,7 @@ GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
 PREFIX = /usr/local
 
 tpm: $(GO_FILES)
-	go build -i -v -o ${OUT} -ldflags="-X main.VERSION=${VERSION}" ${PKG}
+	go build -i -v -o ${OUT} -ldflags "-X ${PKG}/cmd.Version=${VERSION} -X ${PKG}/pkg/client.Version=${VERSION}" ${PKG}
 
 lint:
 	@for file in ${GO_FILES}; do \

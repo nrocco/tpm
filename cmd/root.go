@@ -10,12 +10,16 @@ import (
 	"github.com/nrocco/tpm/pkg/client"
 )
 
-var VERSION string
+var (
+	// Version holds the version number of the tpm cli tool
+	Version string
+	cfgFile string
 
-var cfgFile string
+	// TpmClient represents an instance of client.TpmClient
+	TpmClient client.TpmClient
+)
 
-var TpmClient client.TpmClient
-
+// RootCmd is the main entry point for tpm
 var RootCmd = &cobra.Command{
 	Use:   "tpm",
 	Short: "A Team Password Manager CLI Application",
@@ -29,8 +33,8 @@ var RootCmd = &cobra.Command{
 	},
 }
 
-func Execute(version string) error {
-	VERSION = version
+// Execute executes the RootCmd logic
+func Execute() error {
 	return RootCmd.Execute()
 }
 

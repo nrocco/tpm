@@ -26,7 +26,7 @@ var versionCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Client:")
-		fmt.Println("  Version:    " + VERSION)
+		fmt.Println("  Version:    " + Version)
 		fmt.Println("  OS/Arch:    " + runtime.GOOS + "/" + runtime.GOARCH)
 		fmt.Println("  Shell:      " + os.Getenv("SHELL"))
 		fmt.Println("  User:       " + os.Getenv("USER"))

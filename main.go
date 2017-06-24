@@ -7,13 +7,8 @@ import (
 	"github.com/nrocco/tpm/cmd"
 )
 
-var (
-	// VERSION holds the version number of the tpm client
-	VERSION = "undefined"
-)
-
 func main() {
-	if err := cmd.Execute(VERSION); err != nil {
+	if err := cmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}

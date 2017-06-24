@@ -70,17 +70,17 @@ func (v *Passwords) UnmarshalJSON(data []byte) error {
 }
 
 func (client *TpmClient) PasswordList(search string) (Passwords, error) {
-	var baseUrl string
+	var baseURL string
 	var err error
 
 	if search != "" {
-		baseUrl = fmt.Sprintf("/api/v4/passwords/search/%s", url.PathEscape(search))
+		baseURL = fmt.Sprintf("/api/v4/passwords/search/%s", url.PathEscape(search))
 	} else {
-		baseUrl = "/api/v4/passwords"
+		baseURL = "/api/v4/passwords"
 	}
 
 	count := Count{}
-	err = client.get(baseUrl+"/count.json", &count)
+	err = client.get(baseURL+"/count.json", &count)
 	if err != nil {
 		return nil, err
 	}
@@ -89,12 +89,12 @@ func (client *TpmClient) PasswordList(search string) (Passwords, error) {
 	passwords := Passwords{}
 
 	for page <= count.Pages {
-		err = client.get(fmt.Sprintf("%s/page/%d.json", baseUrl, page), &passwords)
+		err = client.get(fmt.Sprintf("%s/page/%d.json", baseURL, page), &passwords)
 		if err != nil {
 			return nil, err
 		}
 
-		page += 1
+		page++
 	}
 
 	return passwords, nil
