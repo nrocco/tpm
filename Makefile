@@ -10,8 +10,8 @@ tpm: $(GO_FILES)
 	go build -i -v -o ${OUT} -ldflags="-X main.VERSION=${VERSION}" ${PKG}
 
 lint:
-	@for file in ${GO_FILES} ;  do \
-		golint $$file ; \
+	@for file in ${GO_FILES}; do \
+		golint $${file}; \
 	done
 
 vet:
