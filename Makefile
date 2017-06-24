@@ -1,13 +1,17 @@
-OUT := tpm
+BINARY := tpm
 PKG := github.com/nrocco/tpm
 VERSION := $(shell git describe --always --long --dirty)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
 
+LDFLAGS = "-X ${PKG}/cmd.Version=${VERSION} -X ${PKG}/pkg/client.Version=${VERSION}"
+
 PREFIX = /usr/local
 
-tpm: $(GO_FILES)
-	go build -i -v -o ${OUT} -ldflags "-X ${PKG}/cmd.Version=${VERSION} -X ${PKG}/pkg/client.Version=${VERSION}" ${PKG}
+.DEFAULT_GOAL: $(BINARY)
+
+$(BINARY): $(GO_FILES)
+	go build -i -v -o ${BINARY} -ldflags ${LDFLAGS} ${PKG}
 
 lint:
 	@for file in ${GO_FILES}; do \
@@ -28,3 +32,7 @@ install: tpm
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/tpm
 	rm -f $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_tpm
+
+.PHONY: clean
+clean:
+	if [ -f ${BINARY} ]; then rm ${BINARY}; fi
