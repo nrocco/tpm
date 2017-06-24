@@ -4,6 +4,7 @@ _tpm() {
   commands=(
     'help:Help about any command'
     'password:Manage passwords'
+    'project:Manage projects'
     'version:Show version of the client and server'
   )
 
@@ -12,7 +13,16 @@ _tpm() {
     'help:Help about any command'
     'show:Show a single password'
     'generate:Generate a strong, random password'
-    'search:Search for passwords'
+    'list:List passwords'
+  )
+
+  local -a project_commands
+  project_commands=(
+    'help:Help about any command'
+    'show:Show a single project'
+    'archive:Archive a single project'
+    'unarchive:Unarchive a single project'
+    'list:List projects'
   )
 
   if (( CURRENT == 2 )); then
@@ -20,6 +30,8 @@ _tpm() {
   elif (( CURRENT == 3)); then
     if [[ $words[2] == 'password' ]]; then
         _describe -t password_commands 'password_commands' password_commands
+    elif [[ $words[2] == 'project' ]]; then
+        _describe -t project_commands 'project_commands' project_commands
     fi
   fi
 
