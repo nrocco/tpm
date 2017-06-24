@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var generateCmd = &cobra.Command{
+var passwordGenerateCommand = &cobra.Command{
 	Use:   "generate",
 	Short: "Generate a strong, random password",
 	Long:  `Generate a strong, random password using the API`,
@@ -23,5 +23,5 @@ var generateCmd = &cobra.Command{
 }
 
 func init() {
-	passwordCmd.AddCommand(generateCmd)
+	passwordCommand.AddCommand(passwordGenerateCommand)
 }

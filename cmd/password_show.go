@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var showCmd = &cobra.Command{
+var passwordShowCommand = &cobra.Command{
 	Use:   "show",
 	Short: "Show a single password",
 	Long:  ``,
@@ -18,7 +18,7 @@ var showCmd = &cobra.Command{
 			return errors.New("You need to provide a password id")
 		}
 
-		id := args[0]
+		id, _ := strconv.Atoi(args[0])
 
 		password, err := TpmClient.PasswordGet(id)
 		if err != nil {
@@ -44,5 +44,5 @@ var showCmd = &cobra.Command{
 }
 
 func init() {
-	passwordCmd.AddCommand(showCmd)
+	passwordCommand.AddCommand(passwordShowCommand)
 }
