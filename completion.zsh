@@ -11,18 +11,23 @@ _tpm() {
   local -a password_commands
   password_commands=(
     'help:Help about any command'
-    'show:Show a single password'
-    'generate:Generate a strong, random password'
     'list:List passwords'
+    'show:Show a single password'
+    'permissions:Show permissions for a single password'
+    'generate:Generate a strong, random password'
+    'delete:Delete a single password'
+    'lock:Lock a single password'
+    'unlock:Unlock a single password'
   )
 
   local -a project_commands
   project_commands=(
     'help:Help about any command'
+    'list:List projects'
     'show:Show a single project'
     'archive:Archive a single project'
     'unarchive:Unarchive a single project'
-    'list:List projects'
+    'delete:Delete a single project'
   )
 
   if (( CURRENT == 2 )); then

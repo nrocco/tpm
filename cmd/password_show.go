@@ -11,7 +11,7 @@ import (
 
 var passwordShowCommand = &cobra.Command{
 	Use:   "show",
-	Short: "Show a single password",
+	Short: "Show a password",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
