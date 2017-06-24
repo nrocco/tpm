@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	// VERSION holds the version number of the tpm client
 	VERSION = "undefined"
 )
 
