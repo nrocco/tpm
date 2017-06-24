@@ -1,5 +1,12 @@
 package client
 
+import (
+	"encoding/json"
+	"fmt"
+	"net/url"
+	"strconv"
+)
+
 type CustomField struct {
 	Type  string `json:"type"`
 	Label string `json:"label"`
@@ -8,27 +15,27 @@ type CustomField struct {
 
 type Password struct {
 	ID              int     `json:"id"`
-	Project         Project `json:"project"`
 	AccessInfo      string  `json:"access_info"`
-	Email           string  `json:"email"`
-	Name            string  `json:"name"`
-	Notes           string  `json:"notes"`
-	Password        string  `json:"password"`
-	Tags            string  `json:"tags"`
+	Archived        bool    `json:"archived"`
+	CreatedBy       User    `json:"created_by"`
 	CreatedOn       string  `json:"created_on"`
-	UpdatedOn       string  `json:"updated_on"`
-	Username        string  `json:"username"`
+	Email           string  `json:"email"`
 	ExpiryDate      string  `json:"expiry_date"`
 	ExpiryStatus    int     `json:"expiry_status"`
-	Archived        bool    `json:"archived"`
-	Favorite        bool    `json:"favorite"`
-	Locked          bool    `json:"locked"`
-	NumFiles        int     `json:"num_files"`
 	ExternalSharing bool    `json:"external_sharing"`
 	ExternalURL     string  `json:"external_url"`
+	Favorite        bool    `json:"favorite"`
+	Locked          bool    `json:"locked"`
 	ManagedBy       User    `json:"managed_by"`
-	CreatedBy       User    `json:"created_by"`
+	Name            string  `json:"name"`
+	Notes           string  `json:"notes"`
+	NumFiles        int     `json:"num_files"`
+	Password        string  `json:"password"`
+	Project         Project `json:"project"`
+	Tags            string  `json:"tags"`
 	UpdatedBy       User    `json:"updated_by"`
+	UpdatedOn       string  `json:"updated_on"`
+	Username        string  `json:"username"`
 
 	CustomField1 CustomField `json:"custom_field1"`
 	CustomField2 CustomField `json:"custom_field2"`
@@ -43,21 +50,60 @@ type Password struct {
 
 type Passwords []Password
 
-func (client *TpmClient) PasswordSearch(search string) (Passwords, error) {
-	passwords := Passwords{}
+func (v *Passwords) UnmarshalJSON(data []byte) error {
+	var raw []json.RawMessage
+	err := json.Unmarshal(data, &raw)
+	if err != nil {
+		return err
+	}
 
-	err := client.get("/api/v4/passwords/search/"+search+"/page/1.json", &passwords)
+	for _, r := range raw {
+		var password Password
+		err := json.Unmarshal(r, &password)
+		if err != nil {
+			return err
+		}
+		*v = append(*v, password)
+	}
+
+	return nil
+}
+
+func (client *TpmClient) PasswordList(search string) (Passwords, error) {
+	var baseUrl string
+	var err error
+
+	if search != "" {
+		baseUrl = fmt.Sprintf("/api/v4/passwords/search/%s", url.PathEscape(search))
+	} else {
+		baseUrl = "/api/v4/passwords"
+	}
+
+	count := Count{}
+	err = client.get(baseUrl+"/count.json", &count)
 	if err != nil {
 		return nil, err
+	}
+
+	page := 1
+	passwords := Passwords{}
+
+	for page <= count.Pages {
+		err = client.get(fmt.Sprintf("%s/page/%d.json", baseUrl, page), &passwords)
+		if err != nil {
+			return nil, err
+		}
+
+		page += 1
 	}
 
 	return passwords, nil
 }
 
-func (client *TpmClient) PasswordGet(id string) (*Password, error) {
+func (client *TpmClient) PasswordGet(id int) (*Password, error) {
 	password := &Password{}
 
-	err := client.get("/api/v4/passwords/"+id+".json", password)
+	err := client.get("/api/v4/passwords/"+strconv.Itoa(id)+".json", password)
 	if err != nil {
 		return nil, err
 	}

@@ -7,17 +7,19 @@ import (
 	"time"
 )
 
-type APIVersion struct {
-	Version string `json:"version"`
-	Date    string `json:"version_date"`
-	Number  string `json:"api_version"`
+type TpmClient struct {
+	Client      *http.Client
+	Server      string
+	Username    string
+	Password    string
+	ContentType string
+	UserAgent   string
 }
 
-type TpmClient struct {
-	Client   *http.Client
-	Server   string
-	Username string
-	Password string
+type Count struct {
+	Items        int `json:"num_items"`
+	Pages        int `json:"num_pages"`
+	ItemsPerPage int `json:"num_items_per_page"`
 }
 
 func New(server string, username string, password string) TpmClient {
@@ -25,23 +27,25 @@ func New(server string, username string, password string) TpmClient {
 		Client: &http.Client{
 			Timeout: time.Second * 10,
 		},
-		Server:   server,
-		Username: username,
-		Password: password,
+		Server:      server,
+		Username:    username,
+		Password:    password,
+		ContentType: "application/json; charset=utf-8",
+		UserAgent:   "nrocco/tpm",
 	}
 
 	return client
 }
 
-func (client *TpmClient) get(url string, v interface{}) error {
-	req, reqError := http.NewRequest(http.MethodGet, client.Server+url, nil)
+func (client *TpmClient) request(method string, url string, v interface{}) error {
+	req, reqError := http.NewRequest(method, client.Server+url, nil)
 	if reqError != nil {
 		return reqError
 	}
 
 	req.SetBasicAuth(client.Username, client.Password)
-	req.Header.Add("Content-Type", `application/json; charset=utf-8`)
-	req.Header.Set("User-Agent", "nrocco/tpm")
+	req.Header.Add("Content-Type", client.ContentType)
+	req.Header.Set("User-Agent", client.UserAgent)
 
 	res, resError := client.Client.Do(req)
 	if resError != nil {
@@ -61,13 +65,10 @@ func (client *TpmClient) get(url string, v interface{}) error {
 	return nil
 }
 
-func (client *TpmClient) Version() (*APIVersion, error) {
-	apiVersion := &APIVersion{}
+func (client *TpmClient) put(url string) error {
+	return client.request(http.MethodPut, url, nil)
+}
 
-	err := client.get("/api/v4/version.json", apiVersion)
-	if err != nil {
-		return nil, err
-	}
-
-	return apiVersion, nil
+func (client *TpmClient) get(url string, v interface{}) error {
+	return client.request(http.MethodGet, url, v)
 }
