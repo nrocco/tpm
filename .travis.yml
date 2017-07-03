@@ -3,9 +3,7 @@ services:
   - docker
 language: go
 go:
-  - 1.7.x
   - 1.8.x
-  - 1.9.x
 install: make deps
 notifications:
   email:
