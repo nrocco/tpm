@@ -9,7 +9,7 @@ notifications:
   email:
     on_success: change
     on_failure: always
-script: make build
+script: make test build
 deploy:
   provider: releases
   api_key:
