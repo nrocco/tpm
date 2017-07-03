@@ -1,22 +1,24 @@
-BINARY := tpm
+BIN := tpm
 PKG := github.com/nrocco/tpm
-VERSION := $(shell git describe --always --long --dirty)
-PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
-GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
+VERSION := $(shell git describe --tags --always --dirty)
+PKG_LIST := $(shell go list ${PKG}/... | grep -v ${PKG}/vendor/)
+GO_FILES := $(shell find * -type d -name vendor -prune -or -name '*.go' -type f | grep -v vendor)
 
-LDFLAGS = "-X ${PKG}/cmd.Version=${VERSION} -X ${PKG}/pkg/client.Version=${VERSION}"
+LDFLAGS = "-d -s -w -X ${PKG}/cmd.Version=${VERSION} -X ${PKG}/pkg/client.Version=${VERSION}"
+BUILD_ARGS = -a -x -v -tags netgo -installsuffix netgo -ldflags $(LDFLAGS)
 
 PREFIX = /usr/local
 
-.DEFAULT_GOAL: $(BINARY)
+.DEFAULT_GOAL: build/$(BIN)
 
-$(BINARY): $(GO_FILES)
-	go build -i -v -o ${BINARY} -ldflags ${LDFLAGS} ${PKG}
+build/$(BIN): $(GO_FILES)
+	CGO_ENABLED=0 go build ${BUILD_ARGS} -o build/${BIN} ${PKG}
+
+deps:
+	dep ensure
 
 lint:
-	@for file in ${GO_FILES}; do \
-		golint $${file}; \
-	done
+	@for file in ${GO_FILES}; do golint $${file}; done
 
 vet:
 	@go vet ${PKG_LIST}
@@ -24,7 +26,14 @@ vet:
 test:
 	@go test -short ${PKG_LIST}
 
-install: tpm
+version:
+	@echo $(VERSION)
+
+.PHONY: clean
+clean:
+	rm -rf build
+
+install: build/$(BIN)
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp $< $(DESTDIR)$(PREFIX)/bin/tpm
 	cp completion.zsh $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_tpm
@@ -33,6 +42,13 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/tpm
 	rm -f $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_tpm
 
-.PHONY: clean
-clean:
-	if [ -f ${BINARY} ]; then rm ${BINARY}; fi
+.PHONY: build
+build:
+	mkdir -p build
+	for GOOS in darwin linux; do \
+		for GOARCH in amd64; do \
+		    echo "==> Building ${BIN}-$$GOOS-$$GOARCH"; \
+			docker run --rm -v "$(PWD)":/go/src/$(PKG) -w /go/src/$(PKG) -e "CGO_ENABLED=0" -e "GOOS=$$GOOS" -e "GOARCH=$$GOARCH" golang:1.9 \
+				go build ${BUILD_ARGS} -o build/${BIN}-$$GOOS-$$GOARCH ${PKG}; \
+		done; \
+	done
