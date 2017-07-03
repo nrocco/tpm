@@ -1,17 +1,25 @@
----
+sudo: false
+services:
+  - docker
 language: go
-
 go:
   - 1.7.x
   - 1.8.x
-install:
-  - go get github.com/olekukonko/tablewriter
-  - go get github.com/spf13/cobra/cobra
-  - go get github.com/spf13/viper
-  - go get github.com/mitchellh/go-homedir
-  - go get github.com/fatih/color
+  - 1.9.x
+install: make deps
 notifications:
   email:
-    on_success: always
+    on_success: change
     on_failure: always
-script: make
+script: make build
+deploy:
+  provider: releases
+  api_key:
+    secure: 1hZZ4DwXicxS0LEKdz77jkq2D8elmndbdwApNU1IBsczIaJl4NNoYQBFEn5ZCHWKuJrsuyHzYfvbA8yYWTDxKBRCgUL7ZdsQRKzB7GxzfJ4xN5Vo30YEduAQ/eXyfBlBOyTBH7Q+AlPbZSFfG87AT2zH5X5C4CfXnXtdyaB5QQYNQrMpN8bOtclbe4S7fJJ64mCsby3SN83WRmkk8fALNxD/624OdOmGfKP2nrhwM5Q4P90v3sDzgkCKXzkgwZYgFXTM+GZL3dMn2BLv0P1Xd3k/jKFZgkbk3l7dcJet6xPdVN634Gr43r0Ej8XHg6Z0dGWYKE8Z4ELdAnEjfuhxkKH2CZH9QK3/F/cy8FadCQTypqP3BZXOYjCyZ24MdzSLkM6cyz1hU50tNvdJnwiKKDVd1LcY+J4Mrwa2lYyVzAvix5jsJG6GSKbXRWVWzDV/+p3Gp3hYquHCkcr421h200B121W4ApCKttNCQmAP0yUtovn2lS4eb1HhIBtkAUcwVB3NE8+teUXGYKbUqiA0+Mn2zY3Sm/ciRed2GyRbI0r9dBmutg78H1llKeFMLjy3XL8B6+XanJTXW6Y19zHjsBHQGiLSjrPIchughYbd/GwjRDr/SrYfI9ZGflylfhiARC2k2mvYJ5+hH46S+RULJK5KbE27haQPh16O6YcrGt0=
+  file:
+    - "build/tpm-darwin-amd64"
+    - "build/tpm-linux-amd64"
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: nrocco/tpm
