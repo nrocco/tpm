@@ -11,5 +11,5 @@ var passwordCommand = &cobra.Command{
 }
 
 func init() {
-	RootCmd.AddCommand(passwordCommand)
+	rootCmd.AddCommand(passwordCommand)
 }

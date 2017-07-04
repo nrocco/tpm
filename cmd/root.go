@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -13,14 +11,15 @@ import (
 var (
 	// Version holds the version number of the tpm cli tool
 	Version string
+
+	// cfgFile holds the location to the cli configuration file
 	cfgFile string
 
 	// TpmClient represents an instance of client.TpmClient
 	TpmClient client.TpmClient
 )
 
-// RootCmd is the main entry point for tpm
-var RootCmd = &cobra.Command{
+var rootCmd = &cobra.Command{
 	Use:   "tpm",
 	Short: "A Team Password Manager CLI Application",
 	Long:  ``,
@@ -33,23 +32,23 @@ var RootCmd = &cobra.Command{
 	},
 }
 
-// Execute executes the RootCmd logic
+// Execute executes the rootCmd logic and is the main entry point for tpm
 func Execute() error {
-	return RootCmd.Execute()
+	return rootCmd.Execute()
 }
 
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tpm.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tpm.yaml)")
 
-	RootCmd.PersistentFlags().StringP("server", "s", "", "The base url of the Team Password Manager server")
-	RootCmd.PersistentFlags().StringP("username", "u", "", "Username")
-	RootCmd.PersistentFlags().StringP("password", "p", "", "Password")
+	rootCmd.PersistentFlags().StringP("server", "s", "", "The base url of the Team Password Manager server")
+	rootCmd.PersistentFlags().StringP("username", "u", "", "Username")
+	rootCmd.PersistentFlags().StringP("password", "p", "", "Password")
 
-	viper.BindPFlag("server", RootCmd.PersistentFlags().Lookup("server"))
-	viper.BindPFlag("username", RootCmd.PersistentFlags().Lookup("username"))
-	viper.BindPFlag("password", RootCmd.PersistentFlags().Lookup("password"))
+	viper.BindPFlag("server", rootCmd.PersistentFlags().Lookup("server"))
+	viper.BindPFlag("username", rootCmd.PersistentFlags().Lookup("username"))
+	viper.BindPFlag("password", rootCmd.PersistentFlags().Lookup("password"))
 }
 
 func initConfig() {
@@ -66,8 +65,5 @@ func initConfig() {
 	viper.SetEnvPrefix("tpm")
 	viper.AutomaticEnv()
 
-	err := viper.ReadInConfig()
-	if err != nil {
-		fmt.Println(err)
-	}
+	viper.ReadInConfig()
 }

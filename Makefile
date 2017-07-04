@@ -14,6 +14,7 @@ PREFIX = /usr/local
 build/$(BIN): $(GO_FILES)
 	CGO_ENABLED=0 go build ${BUILD_ARGS} -o build/${BIN} ${PKG}
 
+.PHONY: deps
 deps:
 	go get -u github.com/golang/dep/cmd/dep
 	dep ensure
@@ -30,6 +31,7 @@ vet:
 test:
 	@go test ${PKG_LIST}
 
+.PHONY: version
 version:
 	@echo $(VERSION)
 

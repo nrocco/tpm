@@ -11,5 +11,5 @@ var projectCommand = &cobra.Command{
 }
 
 func init() {
-	RootCmd.AddCommand(projectCommand)
+	rootCmd.AddCommand(projectCommand)
 }
