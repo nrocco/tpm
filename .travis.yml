@@ -4,12 +4,13 @@ services:
 language: go
 go:
   - 1.8.x
-install: make deps
 notifications:
   email:
     on_success: change
     on_failure: always
-script: make test build
+install: make deps
+script: make test
+before_deploy: make build
 deploy:
   provider: releases
   api_key:
