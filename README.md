@@ -28,6 +28,7 @@ The following sub commands are available:
     Available Commands:
       help        Help about any command
       password    Manage passwords
+      project     Manage projects
       version     Show version of the client and server
 
     Flags:
@@ -42,7 +43,7 @@ The following sub commands are available:
 
 The `password` sub command has the following commands available:
 
-    % tpm password --help
+    % tpm password
     Manage passwords
 
     Usage:
@@ -50,8 +51,11 @@ The `password` sub command has the following commands available:
 
     Available Commands:
       generate    Generate a strong, random password
-      search      Search for passwords
-      show        Show a single password
+      list        List passwords
+      lock        Lock a password
+      permissions Show the permissions of a password
+      show        Show a password
+      unlock      Unlock a password
 
     Flags:
       -h, --help   help for password
@@ -63,6 +67,32 @@ The `password` sub command has the following commands available:
       -u, --username string   Username
 
     Use "tpm password [command] --help" for more information about a command.
+
+
+The `project` sub command has the following commands available:
+
+    % tpm project
+    Manage projects
+
+    Usage:
+      tpm project [command]
+
+    Available Commands:
+      archive     Archive a project
+      list        List projects
+      show        Show a single project
+      unarchive   Unarchive a project
+
+    Flags:
+      -h, --help   help for project
+
+    Global Flags:
+          --config string     config file (default is $HOME/.tpm.yaml)
+      -p, --password string   Password
+      -s, --server string     The base url of the Team Password Manager server
+      -u, --username string   Username
+
+    Use "tpm project [command] --help" for more information about a command.
 
 
 The `version` sub command outputs both client and server versions:

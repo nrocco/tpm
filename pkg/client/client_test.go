@@ -1,6 +1,7 @@
 package client
 
 import (
+	"runtime"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func TestNewTpmClient(t *testing.T) {
 		t.Error("Incorrect content type")
 	}
 
-	if client.UserAgent != "tpm/test (darwin/amd64)" {
+	if client.UserAgent != "tpm/"+Version+" ("+runtime.GOOS+"/"+runtime.GOARCH+")" {
 		t.Errorf("Incorrect user agent: %s", client.UserAgent)
 	}
 
