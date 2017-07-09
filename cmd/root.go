@@ -2,10 +2,11 @@ package cmd
 
 import (
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/nrocco/tpm/pkg/client"
+	"github.com/nrocco/tpm/pkg/gpg"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	"github.com/nrocco/tpm/pkg/client"
+	"log"
 )
 
 var (
@@ -24,10 +25,16 @@ var rootCmd = &cobra.Command{
 	Short: "A Team Password Manager CLI Application",
 	Long:  ``,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		encoded_password := viper.GetString("password")
+		password, err := gpg.DecodeGpgString(encoded_password)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		TpmClient = client.New(
 			viper.GetString("server"),
 			viper.GetString("username"),
-			viper.GetString("password"),
+			password,
 		)
 	},
 }
