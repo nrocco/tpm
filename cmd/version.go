@@ -2,28 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
 	"os"
 	"runtime"
-
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	"github.com/nrocco/tpm/pkg/client"
 )
-
-var tpmClient client.TpmClient
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Show version of the client and server",
 	Long:  ``,
-	PreRun: func(cmd *cobra.Command, args []string) {
-		tpmClient = client.New(
-			viper.GetString("server"),
-			viper.GetString("username"),
-			viper.GetString("password"),
-		)
-	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Client:")
 		fmt.Println("  Version:    " + Version)
@@ -32,9 +19,9 @@ var versionCmd = &cobra.Command{
 		fmt.Println("  User:       " + os.Getenv("USER"))
 		fmt.Println("")
 		fmt.Println("Server:")
-		fmt.Println("  Url:        " + tpmClient.Server)
+		fmt.Println("  Url:        " + TpmClient.Server)
 
-		serverVersion, err := tpmClient.Version()
+		serverVersion, err := TpmClient.Version()
 		if err != nil {
 			fmt.Println("  Error:      " + err.Error())
 		} else {
