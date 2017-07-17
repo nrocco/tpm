@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"log"
+	"strings"
 )
 
 var (
@@ -25,10 +26,14 @@ var rootCmd = &cobra.Command{
 	Short: "A Team Password Manager CLI Application",
 	Long:  ``,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		encoded_password := viper.GetString("password")
-		password, err := gpg.DecodeGpgString(encoded_password)
-		if err != nil {
-			log.Fatal(err)
+		password := viper.GetString("password")
+
+		if strings.Contains(password, "-----BEGIN PGP MESSAGE-----") {
+			var err error
+			password, err = gpg.DecodeGpgString(password)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		TpmClient = client.New(

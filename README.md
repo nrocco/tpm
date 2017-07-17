@@ -19,6 +19,31 @@ Create a configuration file with the following format:
     password: "my-dkj880s0sjd-password"
 
 
+Alternatively, if you do not like to store passwords in plain text files you
+can `gpg` encrypt it:
+
+    echo -n my-dkj880s0sjd-password | gpg --encrypt --armor
+
+And this is how your configuration file looks:
+
+    % cat $HOME/.tpm.yaml
+    server: "https://tpm.example.com/index.php"
+    username: "my-username"
+    password: |
+      -----BEGIN PGP MESSAGE-----
+
+      hQEMA4tSPIGBQJQPAQf/Sf52JbFCYctlXl4jB9k60m6XXfs5WO7PVDBoOL55EOrK
+      OUWhFm25SyhAqfdsSuBvhzXyszgmA0XJqCvy5y+kT95SP9vvQfuj26kpfeIcyalL
+      Io+xr+trD0pdg0C7XpqYExtoFTvBe5XyHSQxQgtAbxVy8I5+MQj0xF9XdGDf5rPf
+      pSzJ8QIGSsbd0ybxKkFABGbc7hdgma3lgt+zcHTnA3FNcyTWBg84gtZmTQArhuMU
+      4bGnBc8QIGSsbd0ybxKkFABGbc6rlyfqsdOjB9Dt1phubPw3AI8b0hmgoNfITW18
+      OLITv/5cti6HSV689YQuG9JcAc8QIGSsbd0ybxKkFABGbcPqYa1n94ZkuGGMp+xX
+      azRPHF5lxCJNGW/AsPUwOP2mZNZSR3kaHypX2xAfq8QIGSsbd0ybxKkFABGbcZQV
+      oDlA3ZvmiuEPvu+DHPxXQ=
+      =YJhV
+      -----END PGP MESSAGE-----
+
+
 The following sub commands are available:
 
     % tpm help
