@@ -4,15 +4,18 @@ VERSION := $(shell git describe --tags --always --dirty)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v ${PKG}/vendor/)
 GO_FILES := $(shell find * -type d -name vendor -prune -or -name '*.go' -type f | grep -v vendor)
 
+GOOS := $(shell go env GOOS)
+GOARCH := $(shell go env GOARCH)
 LDFLAGS = "-d -s -w -X ${PKG}/cmd.Version=${VERSION} -X ${PKG}/pkg/client.Version=${VERSION}"
 BUILD_ARGS = -a -tags netgo -installsuffix netgo -ldflags $(LDFLAGS)
 
 PREFIX = /usr/local
 
-.DEFAULT_GOAL: build/$(BIN)
+.DEFAULT_GOAL: build
 
-build/$(BIN): $(GO_FILES)
-	CGO_ENABLED=0 go build ${BUILD_ARGS} -o build/${BIN} ${PKG}
+build/$(BIN)-$(GOOS)-$(GOARCH): $(GO_FILES)
+	mkdir -p build
+	GOOS=$(GOOS) GOARCH=$(GOARCH) CGO_ENABLED=0 go build ${BUILD_ARGS} -o $@ ${PKG}
 
 .PHONY: deps
 deps:
@@ -39,22 +42,21 @@ version:
 clean:
 	rm -rf build
 
+.PHONY: build
+build: build/$(BIN)-$(GOOS)-$(GOARCH)
+
+.PHONY: build-all
+build-all:
+	$(MAKE) build GOOS=linux GOARCH=amd64
+	$(MAKE) build GOOS=darwin GOARCH=amd64
+
+.PHONY: install
 install: build/$(BIN)
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp $< $(DESTDIR)$(PREFIX)/bin/tpm
 	cp completion.zsh $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_tpm
 
+.PHONY: uninstall
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/tpm
 	rm -f $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_tpm
-
-.PHONY: build
-build:
-	mkdir -p build
-	for GOOS in darwin linux; do \
-		for GOARCH in amd64; do \
-		    echo "==> Building ${BIN}-$$GOOS-$$GOARCH"; \
-			docker run --rm -v "$(PWD)":/go/src/$(PKG) -w /go/src/$(PKG) -e "CGO_ENABLED=0" -e "GOOS=$$GOOS" -e "GOARCH=$$GOARCH" golang:1.9 \
-				go build ${BUILD_ARGS} -o build/${BIN}-$$GOOS-$$GOARCH ${PKG}; \
-		done; \
-	done
