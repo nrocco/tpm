@@ -28,8 +28,8 @@
 [[projects]]
   name = "github.com/magiconair/properties"
   packages = ["."]
-  revision = "f917359f079a3759162704eaa8caeec3d01d9f91"
-  version = "v1.7.2"
+  revision = "be5ece7dd465ab0765a9682137865547526d1dfb"
+  version = "v1.7.3"
 
 [[projects]]
   name = "github.com/mattn/go-colorable"
@@ -65,7 +65,7 @@
   branch = "master"
   name = "github.com/olekukonko/tablewriter"
   packages = ["."]
-  revision = "febf2d34b54a69ce7530036c7503b1c9fbfdf0bb"
+  revision = "be7a31354aeea3f9f5efbc5c74d0a67ce132de6f"
 
 [[projects]]
   name = "github.com/pelletier/go-buffruneio"
@@ -95,7 +95,7 @@
   branch = "master"
   name = "github.com/spf13/cobra"
   packages = ["."]
-  revision = "8c6fa02d2225de0f9bdcb7ca912556f68d172d8c"
+  revision = "d994347edadc56d6a7f863775fb6887606685ae6"
 
 [[projects]]
   branch = "master"
@@ -119,19 +119,19 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "d18155cb60f6162f5e706d7f26e4e50a3d4da857"
+  revision = "4cd6d1a821c7175768725b55ca82f14683a29ea4"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["internal/gen","internal/triegen","internal/ucd","transform","unicode/cldr","unicode/norm"]
-  revision = "2bf8f2a19ec09c670e931282edfe6567f6be21c9"
+  revision = "836efe42bb4aa16aaa17b9c155d8813d336ed720"
 
 [[projects]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b"
+  revision = "3b4ad1db5b2a649883ff3782f5f9f6fb52be71af"
 
 [solve-meta]
   analyzer-name = "dep"
