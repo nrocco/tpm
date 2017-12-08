@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
@@ -47,7 +46,7 @@ name:string
 		table.Append([]string{"ID", "NAME", "ACCESS INFO", "USERNAME", "TAGS"})
 
 		for _, password := range passwords {
-			table.Append([]string{strconv.FormatInt(int64(password.ID), 10), password.Name, password.AccessInfo, password.Username, password.Tags})
+			table.Append([]string{string(password.ID), password.Name, password.AccessInfo, password.Username, password.Tags})
 		}
 
 		table.Render()

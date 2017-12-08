@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"strconv"
 )
 
 type Project struct {
-	ID        int    `json:"id"`
+	ID        string `json:"id"`
 	ParentID  int    `json:"parent_id"`
 	Name      string `json:"name"`
 	Notes     string `json:"notes"`
@@ -21,6 +20,22 @@ type Project struct {
 	UpdatedOn string `json:"updated_on"`
 	UpdatedBy User   `json:"updated_by"`
 	ManagedBy User   `json:"managed_by"`
+}
+
+// UnmarshalJSON handles id's from team password manager as int and string
+func (v *Project) UnmarshalJSON(data []byte) error {
+	type Project2 Project
+	x := struct {
+		Project2
+		ID json.Number `json:"id"`
+	}{Project2: Project2(*v)}
+
+	if err := json.Unmarshal(data, &x); err != nil {
+		return err
+	}
+	*v = Project(x.Project2)
+	v.ID = x.ID.String()
+	return nil
 }
 
 type Projects []Project
@@ -74,10 +89,10 @@ func (client *TpmClient) ProjectList(search string) (Projects, error) {
 	return projects, nil
 }
 
-func (client *TpmClient) ProjectGet(id int) (*Project, error) {
+func (client *TpmClient) ProjectGet(id string) (*Project, error) {
 	project := &Project{}
 
-	err := client.get("/api/v4/projects/"+strconv.Itoa(id)+".json", project)
+	err := client.get("/api/v4/projects/"+id+".json", project)
 	if err != nil {
 		return nil, err
 	}
@@ -85,12 +100,12 @@ func (client *TpmClient) ProjectGet(id int) (*Project, error) {
 	return project, nil
 }
 
-func (client *TpmClient) ProjectDelete(id int) error {
+func (client *TpmClient) ProjectDelete(id string) error {
 	return nil
 }
 
-func (client *TpmClient) ProjectArchive(id int) error {
-	err := client.put("/api/v4/projects/" + strconv.Itoa(id) + "/archive.json")
+func (client *TpmClient) ProjectArchive(id string) error {
+	err := client.put("/api/v4/projects/" + id + "/archive.json")
 	if err != nil {
 		return err
 	}
@@ -98,8 +113,8 @@ func (client *TpmClient) ProjectArchive(id int) error {
 	return nil
 }
 
-func (client *TpmClient) ProjectUnarchive(id int) error {
-	err := client.put("/api/v4/projects/" + strconv.Itoa(id) + "/unarchive.json")
+func (client *TpmClient) ProjectUnarchive(id string) error {
+	err := client.put("/api/v4/projects/" + id + "/unarchive.json")
 	if err != nil {
 		return err
 	}

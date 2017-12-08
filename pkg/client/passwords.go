@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"strconv"
 )
 
 type CustomField struct {
@@ -14,7 +13,7 @@ type CustomField struct {
 }
 
 type Password struct {
-	ID              int     `json:"id"`
+	ID              string  `json:"id"`
 	AccessInfo      string  `json:"access_info"`
 	Archived        bool    `json:"archived"`
 	CreatedBy       User    `json:"created_by"`
@@ -29,7 +28,7 @@ type Password struct {
 	ManagedBy       User    `json:"managed_by"`
 	Name            string  `json:"name"`
 	Notes           string  `json:"notes"`
-	NumFiles        int     `json:"num_files"`
+	NumFiles        string  `json:"num_files"`
 	Password        string  `json:"password"`
 	Project         Project `json:"project"`
 	Tags            string  `json:"tags"`
@@ -46,6 +45,24 @@ type Password struct {
 	CustomField7 CustomField `json:"custom_field7"`
 	CustomField8 CustomField `json:"custom_field8"`
 	CustomField9 CustomField `json:"custom_field9"`
+}
+
+// UnmarshalJSON handles id's from team password manager as int and string
+func (v *Password) UnmarshalJSON(data []byte) error {
+	type Password2 Password
+	x := struct {
+		Password2
+		ID       json.Number `json:"id"`
+		NumFiles json.Number `json:"num_files"`
+	}{Password2: Password2(*v)}
+
+	if err := json.Unmarshal(data, &x); err != nil {
+		return err
+	}
+	*v = Password(x.Password2)
+	v.ID = x.ID.String()
+	v.NumFiles = x.NumFiles.String()
+	return nil
 }
 
 type Passwords []Password
@@ -100,10 +117,10 @@ func (client *TpmClient) PasswordList(search string) (Passwords, error) {
 	return passwords, nil
 }
 
-func (client *TpmClient) PasswordGet(id int) (*Password, error) {
+func (client *TpmClient) PasswordGet(id string) (*Password, error) {
 	password := &Password{}
 
-	err := client.get("/api/v4/passwords/"+strconv.Itoa(id)+".json", password)
+	err := client.get("/api/v4/passwords/"+id+".json", password)
 	if err != nil {
 		return nil, err
 	}

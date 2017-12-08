@@ -3,7 +3,6 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/spf13/cobra"
 )
@@ -17,14 +16,12 @@ var projectShowCommand = &cobra.Command{
 			return errors.New("You need to provide a project id")
 		}
 
-		id, _ := strconv.Atoi(args[0])
-
-		project, err := TpmClient.ProjectGet(id)
+		project, err := TpmClient.ProjectGet(args[0])
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("Id:         " + strconv.FormatInt(int64(project.ID), 10))
+		fmt.Println("Id:         " + project.ID)
 		fmt.Println("Name:       " + project.Name)
 		fmt.Println("UpdatedOn:  " + project.UpdatedOn)
 		fmt.Println("Tags:       " + project.Tags)

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
@@ -33,7 +32,7 @@ var projectListCommand = &cobra.Command{
 		table.Append([]string{"Id", "Name", "Updated", "Tags"})
 
 		for _, project := range projects {
-			table.Append([]string{strconv.FormatInt(int64(project.ID), 10), project.Name, project.UpdatedOn, project.Tags})
+			table.Append([]string{project.ID, project.Name, project.UpdatedOn, project.Tags})
 		}
 
 		table.Render()

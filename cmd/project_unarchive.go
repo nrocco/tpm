@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/spf13/cobra"
 )
@@ -16,9 +15,7 @@ var projectUnarchiveCommand = &cobra.Command{
 			return errors.New("You need to provide a project id")
 		}
 
-		id, _ := strconv.Atoi(args[0])
-
-		err := TpmClient.ProjectUnarchive(id)
+		err := TpmClient.ProjectUnarchive(args[0])
 		if err != nil {
 			return err
 		}

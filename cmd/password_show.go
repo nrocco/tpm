@@ -3,7 +3,6 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -18,14 +17,12 @@ var passwordShowCommand = &cobra.Command{
 			return errors.New("You need to provide a password id")
 		}
 
-		id, _ := strconv.Atoi(args[0])
-
-		password, err := TpmClient.PasswordGet(id)
+		password, err := TpmClient.PasswordGet(args[0])
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("Id:         " + strconv.FormatInt(int64(password.ID), 10))
+		fmt.Println("Id:         " + password.ID)
 		fmt.Println("Name:       " + password.Name)
 		fmt.Println("AccessInfo: " + password.AccessInfo)
 		fmt.Println("Username:   " + password.Username)

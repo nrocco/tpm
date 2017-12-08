@@ -111,12 +111,12 @@ func TestPasswordGet(t *testing.T) {
 
 	client := New(ts.URL, "fuu", "bar")
 
-	password, err := client.PasswordGet(1)
+	password, err := client.PasswordGet("1")
 	if err != nil {
 		t.Errorf("Error: %v", err)
 	}
 
-	if password.ID != 1 {
+	if password.ID != "1" {
 		t.Errorf("Unexpected result: %v", password.ID)
 	}
 }
@@ -131,7 +131,7 @@ func TestPasswordGetUnavailable(t *testing.T) {
 
 	client := New(ts.URL, "fuu", "bar")
 
-	_, err := client.PasswordGet(1)
+	_, err := client.PasswordGet("1")
 	if err == nil {
 		t.Errorf("Error: %v", err)
 	}

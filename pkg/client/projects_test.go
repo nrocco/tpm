@@ -95,12 +95,12 @@ func TestProjectGet(t *testing.T) {
 
 	client := New(ts.URL, "fuu", "bar")
 
-	project, err := client.ProjectGet(1)
+	project, err := client.ProjectGet("1")
 	if err != nil {
 		t.Errorf("Error: %v", err)
 	}
 
-	if project.ID != 20 {
+	if project.ID != "20" {
 		t.Errorf("Unexpected result: %v", project.ID)
 	}
 }
@@ -115,7 +115,7 @@ func TestProjectGetUnavailable(t *testing.T) {
 
 	client := New(ts.URL, "fuu", "bar")
 
-	_, err := client.ProjectGet(1)
+	_, err := client.ProjectGet("1")
 	if err == nil {
 		t.Errorf("Error: %v", err)
 	}

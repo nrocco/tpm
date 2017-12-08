@@ -2,7 +2,7 @@ BIN := tpm
 PKG := github.com/nrocco/tpm
 VERSION := $(shell git describe --tags --always --dirty)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v ${PKG}/vendor/)
-GO_FILES := $(shell find * -type d -name vendor -prune -or -name '*.go' -type f | grep -v vendor)
+GO_FILES := $(shell git ls-files '*.go')
 
 GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
@@ -19,20 +19,19 @@ build/$(BIN)-$(GOOS)-$(GOARCH): $(GO_FILES)
 
 .PHONY: deps
 deps:
-	go get -u github.com/golang/dep/cmd/dep
 	dep ensure
 
 .PHONY: lint
 lint:
-	@for file in ${GO_FILES}; do golint $${file}; done
+	golint -set_exit_status ${PKG_LIST}
 
 .PHONY: vet
 vet:
-	@go vet ${PKG_LIST}
+	go vet -v ${PKG_LIST}
 
 .PHONY: test
 test:
-	@go test ${PKG_LIST}
+	go test -short ${PKG_LIST}
 
 .PHONY: version
 version:
@@ -51,7 +50,7 @@ build-all:
 	$(MAKE) build GOOS=darwin GOARCH=amd64
 
 .PHONY: install
-install: build/$(BIN)
+install: build/$(BIN)-$(GOOS)-$(GOARCH)
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp $< $(DESTDIR)$(PREFIX)/bin/tpm
 	cp completion.zsh $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_tpm
