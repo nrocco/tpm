@@ -1,38 +1,36 @@
 package cmd
 
 import (
+	"fmt"
+	"os"
+	"strings"
+
 	homedir "github.com/mitchellh/go-homedir"
-	"github.com/nrocco/tpm/pkg/client"
-	"github.com/nrocco/tpm/pkg/gpg"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"log"
-	"strings"
+
+	"github.com/nrocco/tpm/pkg/client"
+	"github.com/nrocco/tpm/pkg/gpg"
 )
 
-var (
-	// Version holds the version number of the tpm cli tool
-	Version string
+var cfgFile string
 
-	// cfgFile holds the location to the cli configuration file
-	cfgFile string
-
-	// TpmClient represents an instance of client.TpmClient
-	TpmClient client.TpmClient
-)
+// TpmClient represents an instance of client.TpmClient
+var TpmClient client.TpmClient
 
 var rootCmd = &cobra.Command{
-	Use:   "tpm",
-	Short: "A Team Password Manager CLI Application",
-	Long:  ``,
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	Use:          "tpm",
+	Short:        "A Team Password Manager CLI Application",
+	SilenceUsage: true,
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		password := viper.GetString("password")
 
 		if strings.Contains(password, "-----BEGIN PGP MESSAGE-----") {
 			var err error
 			password, err = gpg.DecodeGpgString(password)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 		}
 
@@ -41,12 +39,17 @@ var rootCmd = &cobra.Command{
 			viper.GetString("username"),
 			password,
 		)
+
+		return nil
 	},
 }
 
 // Execute executes the rootCmd logic and is the main entry point for tpm
-func Execute() error {
-	return rootCmd.Execute()
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 
 func init() {
