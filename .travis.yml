@@ -1,7 +1,7 @@
 sudo: false
 language: go
 go:
-  - 1.9.x
+- 1.9.x
 git:
   depth: 3
 notifications:
@@ -9,15 +9,15 @@ notifications:
     on_success: change
     on_failure: always
 install:
-  - go get -u github.com/golang/dep/cmd/dep
-  - go get -u github.com/golang/lint/golint
-  - dep ensure
+- go get -u github.com/golang/dep/cmd/dep
+- go get -u github.com/golang/lint/golint
+- dep ensure
 script:
-  - make lint
-  - make vet
-  - make test
+- make lint
+- make vet
+- make test
 before_deploy:
-  - make build-all
+- make build-all
 deploy:
   provider: releases
   api_key:
