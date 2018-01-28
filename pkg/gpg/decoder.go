@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+// DecodeGpgString uses the gpg program on $PATH to decrypt a gpg encrypted
+// string
 func DecodeGpgString(encoded string) (string, error) {
 	cmd := exec.Command("gpg", "--decrypt", "-q")
 

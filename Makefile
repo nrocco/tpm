@@ -8,7 +8,7 @@ GO_FILES := $(shell git ls-files '*.go')
 
 GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
-LDFLAGS = "-d -s -w -X ${PKG}/cmd.Version=${VERSION} -X ${PKG}/cmd.Commit=${COMMIT} -X ${PKG}/cmd.BuildDate=${DATE} -X ${PKG}/pkg/client.Version=${VERSION}"
+LDFLAGS = "-d -s -w -X ${PKG}/cmd.version=${VERSION} -X ${PKG}/cmd.commit=${COMMIT} -X ${PKG}/cmd.buildDate=${DATE} -X ${PKG}/pkg/client.Version=${VERSION}"
 BUILD_ARGS = -a -tags netgo -installsuffix netgo -ldflags $(LDFLAGS)
 
 PREFIX = /usr/local

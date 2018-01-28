@@ -6,12 +6,14 @@ import (
 	"net/url"
 )
 
+// CustomField holds generic data associated with a Password
 type CustomField struct {
 	Type  string `json:"type"`
 	Label string `json:"label"`
 	Data  string `json:"data"`
 }
 
+// Password represents a password from the team password manager API
 type Password struct {
 	ID              string  `json:"id"`
 	AccessInfo      string  `json:"access_info"`
@@ -65,8 +67,10 @@ func (v *Password) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Passwords is a collection of team password manager Password types
 type Passwords []Password
 
+// UnmarshalJSON handles id's from team password manager as int and string
 func (v *Passwords) UnmarshalJSON(data []byte) error {
 	var raw []json.RawMessage
 	err := json.Unmarshal(data, &raw)
@@ -86,6 +90,8 @@ func (v *Passwords) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// PasswordList retrieves a list of password matching the given search from the
+// API
 func (client *TpmClient) PasswordList(search string) (Passwords, error) {
 	var baseURL string
 	var err error
@@ -117,6 +123,7 @@ func (client *TpmClient) PasswordList(search string) (Passwords, error) {
 	return passwords, nil
 }
 
+// PasswordGet fetches a single password by ID from the API
 func (client *TpmClient) PasswordGet(id string) (*Password, error) {
 	password := &Password{}
 

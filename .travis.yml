@@ -1,22 +1,28 @@
 sudo: false
 language: go
 go:
-  - 1.8.x
+  - 1.9.x
+git:
+  depth: 3
 notifications:
   email:
     on_success: change
     on_failure: always
-install: make deps
-script: make test
-before_deploy: make build-all
+install:
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
+script:
+  - make lint
+  - make vet
+  - make test
+before_deploy:
+  - make build-all
 deploy:
   provider: releases
   api_key:
     secure: 1hZZ4DwXicxS0LEKdz77jkq2D8elmndbdwApNU1IBsczIaJl4NNoYQBFEn5ZCHWKuJrsuyHzYfvbA8yYWTDxKBRCgUL7ZdsQRKzB7GxzfJ4xN5Vo30YEduAQ/eXyfBlBOyTBH7Q+AlPbZSFfG87AT2zH5X5C4CfXnXtdyaB5QQYNQrMpN8bOtclbe4S7fJJ64mCsby3SN83WRmkk8fALNxD/624OdOmGfKP2nrhwM5Q4P90v3sDzgkCKXzkgwZYgFXTM+GZL3dMn2BLv0P1Xd3k/jKFZgkbk3l7dcJet6xPdVN634Gr43r0Ej8XHg6Z0dGWYKE8Z4ELdAnEjfuhxkKH2CZH9QK3/F/cy8FadCQTypqP3BZXOYjCyZ24MdzSLkM6cyz1hU50tNvdJnwiKKDVd1LcY+J4Mrwa2lYyVzAvix5jsJG6GSKbXRWVWzDV/+p3Gp3hYquHCkcr421h200B121W4ApCKttNCQmAP0yUtovn2lS4eb1HhIBtkAUcwVB3NE8+teUXGYKbUqiA0+Mn2zY3Sm/ciRed2GyRbI0r9dBmutg78H1llKeFMLjy3XL8B6+XanJTXW6Y19zHjsBHQGiLSjrPIchughYbd/GwjRDr/SrYfI9ZGflylfhiARC2k2mvYJ5+hH46S+RULJK5KbE27haQPh16O6YcrGt0=
-  file:
-    - "build/tpm-darwin-amd64"
-    - "build/tpm-linux-amd64"
+  file_glob: true
+  file: build/*
   skip_cleanup: true
   on:
     tags: true
-    repo: nrocco/tpm

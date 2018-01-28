@@ -6,6 +6,7 @@ import (
 	"net/url"
 )
 
+// Project represents a team password manager Project
 type Project struct {
 	ID        string `json:"id"`
 	ParentID  int    `json:"parent_id"`
@@ -38,8 +39,10 @@ func (v *Project) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Projects is a collection of team password manager Project types
 type Projects []Project
 
+// UnmarshalJSON handles id's from team password manager as int and string
 func (v *Projects) UnmarshalJSON(data []byte) error {
 	var raw []json.RawMessage
 	err := json.Unmarshal(data, &raw)
@@ -58,6 +61,7 @@ func (v *Projects) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// ProjectList retrieves a list of projects from the API
 func (client *TpmClient) ProjectList(search string) (Projects, error) {
 	var baseURL string
 	var err error
@@ -89,6 +93,7 @@ func (client *TpmClient) ProjectList(search string) (Projects, error) {
 	return projects, nil
 }
 
+// ProjectGet fetches a single project by ID from the API
 func (client *TpmClient) ProjectGet(id string) (*Project, error) {
 	project := &Project{}
 
@@ -100,10 +105,12 @@ func (client *TpmClient) ProjectGet(id string) (*Project, error) {
 	return project, nil
 }
 
+// ProjectDelete removes a project
 func (client *TpmClient) ProjectDelete(id string) error {
 	return nil
 }
 
+// ProjectArchive archives a project
 func (client *TpmClient) ProjectArchive(id string) error {
 	err := client.put("/api/v4/projects/" + id + "/archive.json")
 	if err != nil {
@@ -113,6 +120,7 @@ func (client *TpmClient) ProjectArchive(id string) error {
 	return nil
 }
 
+// ProjectUnarchive unarchives a project
 func (client *TpmClient) ProjectUnarchive(id string) error {
 	err := client.put("/api/v4/projects/" + id + "/unarchive.json")
 	if err != nil {
